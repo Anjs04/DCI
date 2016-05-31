@@ -130,8 +130,8 @@ generateSA4Map <- function(x, vars, func, palette = yawcrcPalette) {
 
 }
 
-generateSA4MapForVariable <- function(vars, func) {
-	sapply(seq(1:length(vars)), generateSA4Map, vars, func )
+generateSA4MapForVariable <- function(vars, func, palette = yawcrcPalette) {
+	sapply(seq(1:length(vars)), generateSA4Map, vars, func, palette )
 }
 
 generateScatterMap <- function(x, vars, func, palette = yawcrcPalette) {
@@ -154,12 +154,54 @@ generateScatterMap <- function(x, vars, func, palette = yawcrcPalette) {
   df <- augmented.data.with.coords
   df$var.name <- df[,var.name]
 
+  df$var.name = factor(df$var.name, labels=func())
+
+  # p =
+  # ggplot(df) +
+  #   aes(lon, lat, colour = var.name) +
+  #   geom_point() +
+  #   coord_equal(xlim = c(110, 155), ylim = c(-45, -10)) +
+  #   scale_colour_gradient( high = "#132B43", low = "#56B1F7")
+
   p =
-  ggplot(df) +
-    aes(lon, lat, colour = var.name) +
-    geom_point() +
-    coord_equal(xlim = c(110, 155), ylim = c(-45, -10)) +
-    scale_colour_gradient( high = "#132B43", low = "#56B1F7")
+    ggplot() +
+
+    ###The Background Map###
+    #Don't want a legend with 150 variables so suppress the legend
+    #geom_polygon(data = aus.df,
+    #             aes(long, lat, group = group, fill = SA4_NAME11),
+    #             show_guide = FALSE ) +
+    geom_path(data = aus.df,
+              aes(long, lat, group = group, fill = SA4_NAME11),
+              color="#DFDFDF") +
+    #for some reason it maps too much ocean so limit coords (EDIT: due to Christmas Island)
+    #scale_fill_hue(c=10,
+    #               l=90) +
+    theme(
+      panel.background = element_blank(),
+      panel.border = element_blank(),
+      axis.line = element_blank(),
+      axis.text = element_blank(),
+      axis.title = element_blank(),
+      axis.ticks = element_blank(),
+      plot.title = element_text(family = "Times",
+                                color="#404040",
+                                size=18),
+      legend.title = element_blank()
+      ) +
+
+    ###The Transparent Jittered Scatterplot###
+    geom_point(data = df,
+               aes(lon, lat, colour = var.name),
+               position = position_jitter(00.004, 00.004),
+               alpha = 0.05) +
+    coord_equal(xlim = c(110, 155),
+                ylim = c(-45, -10)) +
+    scale_colour_manual(values = palette) +
+    ggtitle(unlist(metadata$Name)) +
+    guides(colour = guide_legend(override.aes = list(alpha = 1,
+                                                     shape = 15,
+                                                     size = 10)))
 
 
   full.file <- paste("./figs/maps/", var.name, "_scatter.png", sep="")
@@ -176,6 +218,6 @@ generateScatterMap <- function(x, vars, func, palette = yawcrcPalette) {
 
 }
 
-generateScatterMapForVariable <- function(vars, func) {
-	sapply(seq(1:length(vars)), generateScatterMap, vars, func )
+generateScatterMapForVariable <- function(vars, func, palette = yawcrcPalette) {
+	sapply(seq(1:length(vars)), generateScatterMap, vars, func, palette )
 }

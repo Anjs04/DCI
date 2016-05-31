@@ -56,6 +56,7 @@ yawcrcPalette2 <- c("#139DEA", "#56CDFF", "#949494", "#F07899", "#EA3568", "#E8A
 yawcrcPalette3 <- c("#032767", "#139DEC", "#6BCEFF", "#FFFBE2", "#FFF88A", "#E8A81C", "#000000")
 yawcrcPalette4 <- c("#032767", "#139DEC", "#DFDFDF", "#FFFBE2", "#FFF88A", "#000000", "#A8A8A8")
 yawcrcPalette5 <- c("#032767", "#139DEC", "#6BCEFF", "#FFFBE2", "#FFF88A", "#F8B84C")
+yawcrcPalette6 <- c("#032767", "#139DEC", "#6BCEFF", "#FFF88A", "#F8B84C", "#888888")
 yawcrcPalette <- yawcrcPalette3
 yawcrcPaletteFivePoints <- yawcrcPalette4
 

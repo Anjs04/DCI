@@ -544,7 +544,7 @@ generateAllSA4Maps <- function() {
 generateAllScatterMaps <- function() {
 
 	# Generate maps for single statements
-	generateScatterMapForVariable(vars.frequency, frequencyLabels)
+	generateScatterMapForVariable(vars.frequency, frequencyLabels, yawcrcPalette6)
 	generateScatterMapForVariable(vars.frequency.months, frequencyMonthLabels)
 	generateScatterMapForVariable(vars.ease, easeLabels)
 	generateScatterMapForVariable(vars.agreement, agreementLabels)
@@ -552,7 +552,7 @@ generateAllScatterMaps <- function() {
 	generateScatterMapForVariable(vars.yes_no, yesNoLabels)
 
 	# Generate maps for variable aggregates
-	generateScatterMap(0, c("Q74"), frequencyLabels)
+	generateScatterMap(0, c("Q74"), frequencyLabels, yawcrcPalette6)
 	generateScatterMap(0, c("Q287"), importanceLabels)
 	generateScatterMap(0, c("Q341"), agreementLabels)
 	generateScatterMap(0, c("Q343"), frequencyMonthLabels)
