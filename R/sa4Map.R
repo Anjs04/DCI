@@ -163,8 +163,7 @@ scatter =
     axis.title = element_blank(),
     axis.ticks = element_blank(),
     plot.title = element_text(family = "Times", 
-                              color="#000000", 
-                              size=32),
+                              color="#000000"),
     legend.title = element_blank()
     ) +
 
