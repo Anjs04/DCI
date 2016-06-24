@@ -52,11 +52,14 @@ cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2",
 # cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 # blackPalette <- c("#000000")
 yawcrcPalette1 <- c("#139DEA", "#56CDFF", "#949494", "#F07899", "#EA3568", "#FFFFFF", "#000000")
-yawcrcPalette2 <- c("#139DEA", "#56CDFF", "#949494", "#F07899", "#EA3568", "#E8A81C", "#000000")
+yawcrcPalette2 <- c("#139DEA", "#56CDFF", "#949494", "#F07899", "#EA3568", "#EA3568", "#000000")
 yawcrcPalette3 <- c("#032767", "#139DEC", "#6BCEFF", "#FFFBE2", "#FFF88A", "#E8A81C", "#000000")
 yawcrcPalette4 <- c("#032767", "#139DEC", "#DFDFDF", "#FFFBE2", "#FFF88A", "#000000", "#A8A8A8")
-yawcrcPalette5 <- c("#032767", "#139DEC", "#6BCEFF", "#FFFBE2", "#FFF88A", "#F8B84C")
+yawcrcPalette5 <- c("#032767", "#139DEC", "#6BCEFF", "#FFFBE2", "#FFF88A", "#F8B84C", "#D55E00")
 yawcrcPalette6 <- c("#032767", "#139DEC", "#6BCEFF", "#FFF88A", "#F8B84C", "#888888")
+yawcrcPalette7 <- c("#032767", "#139DEC", "#6BCEFF", "#F07899", "#EA3568", "#901538","#000000")
+yawcrcPalette8 <- c("#032767", "#139DEC", "#6BCEFF", "#F07899", "#EA3568", "#000000")
+yawcrcPalette9 <- c("#139DEC", "#EA3568", "#F8B84C")
 yawcrcPalette <- yawcrcPalette3
 yawcrcPaletteFivePoints <- yawcrcPalette4
 
@@ -783,6 +786,60 @@ generateOccupationFrequencies <- function(vars, func) {
 	sapply(seq(1:length(vars)), generateSingleOccupationFrequency, vars, func)
 }
 
+generateSingleMinorityFrequency <- function(x, vars, func, palette = yawcrcPalette) {
+  minority.groups <- c("culturally.and.linguistically.diverse",
+                        "refugees.and.asylum.seekers",
+                        "low.income.households",
+                        "sole.parent.families",
+                        "indigenous.communities")
+
+  # Not included: "seniors", "unemployed.or.underemployed", "people.in.remote.communities", "homeless"
+  # Justification:
+  # 216: Seniors
+  # Already analysed by age groups
+  # 217: The unemployed or under-employed
+  # Should be covered to some extent with analysis by Occupation variable
+  # 219: People in remote communities
+  # Partially covered under Location (+ Indigenous)
+  # 220: Homeless
+  # Small sample
+
+  for (i in 1:length(minority.groups)) {
+    minority.group <- minority.groups[i]
+    if (x > 0) {
+  		ind.names <- obtainIndicatorNames(vars)
+  		var.name <- vars[x]
+  		ind.name <- ind.names[x]
+
+  		freqs <- table(augmented.data[,var.name], augmented.data[,minority.group])
+  		metadata <- expandedIndicators[which(ind.name == expandedIndicators$DCI.ID),]
+  	}
+  	else {
+  		var.name <- vars[1]
+  		ind.name <- gsub("Q", "", var.name)
+
+  		freqs <- table(augmented.data[,var.name], augmented.data[,minority.group])
+  		metadata <- indicators[which(ind.name == indicators$DCI.ID),]
+  		# For consistency
+  		metadata$Name <- as.character(metadata$Indicator...Variable)
+  	}
+    mg.file <- gsub("\\.", "_", minority.group)
+    mg.label <- gsub("\\.", " ", minority.group)
+  	chartFrequencies(freqs,
+  							paste("minority/", mg.file, "/", var.name, "_freqs", sep = ""),
+  							metadata,
+  							func,
+  							paste("by Minority: ", mg.label, sep=""),
+  							paste("Minority: ", mg.label, sep=""),
+  							palette,
+  							FALSE)
+  }
+}
+
+generateMinorityFrequencies <- function(vars, func) {
+	sapply(seq(1:length(vars)), generateSingleMinorityFrequency, vars, func)
+}
+
 
 
 sumVariable <- function() {
@@ -997,6 +1054,28 @@ questionCategory <- function(var.name) {
 	}
 
 	return (category)
+}
+
+questionIssue <- function(var.name) {
+
+	# Remove 'Q' from name
+	ind.name <- gsub("Q", "", var.name)
+
+	# Remove 'total.' from name
+	ind.name <- gsub("total.", "", ind.name)
+
+	# Replace underscores for lookups
+	ind.name <- gsub("_", ".", ind.name)
+
+	metadata <- indicators[which(ind.name == indicators$DCI.ID),c("Critical.Issue")]
+	# For consistency
+	issue <- as.character(unlist(metadata))
+	if (length(issue) == 0) {
+		metadata <- expandedIndicators[which(ind.name == expandedIndicators$DCI.ID),c("Label")]
+		issue <- as.character(unlist(metadata))
+	}
+
+	return (issue)
 }
 
 questionText <- function(var.name) {

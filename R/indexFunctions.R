@@ -13,7 +13,7 @@ generateIndexForInterests <- function() {
 }
 
 generateIndexForResilience <- function() {
-	# Resilience is more complex; high scores on some responses can be 
+	# Resilience is more complex; high scores on some responses can be
 	# interpreted as more resilient, others as less resilient
 
 	# Reverse harm  results - these are interpreted as meaning *less* resilient
@@ -204,7 +204,7 @@ sumInterests <- function() {
 	divisor <- 183
 	augmented.data$interests.index <<- 100 * rowSums(augmented.data[,vars.interests.for.index]) / divisor
 	return(augmented.data$interests.index)
-	
+
 }
 
 sumResilience <- function() {
@@ -279,7 +279,7 @@ sumResilience <- function() {
 	divisor <- 91
 	augmented.data$resilience.index <<- 100 * rowSums(augmented.data[,vars.resilience.for.index]) / divisor
 	return(augmented.data$resilience.index)
-	
+
 }
 
 sumConnectedness <- function() {
@@ -291,7 +291,7 @@ sumConnectedness <- function() {
 	total.287 <- 0
 	total.343 <- 0
 	total.429 <- 0
-	
+
 	for (i in 1:length(vars.connectedness.helping.others.277)) {
 		var.name <- vars.connectedness.helping.others.277[i]
 		new.var <- paste(var.name, ".for.index", sep = "")
@@ -353,11 +353,11 @@ sumConnectedness <- function() {
 	augmented.data$total.429 <<- total.429
 
 	# Max value: (Q277) + (Q280) + (Q287) + (Q343) + (Q429)
-	# Max value: 13 * 1 + 13 * 1 + 6 * 2  + 8 * 5  + 9 * 4 
+	# Max value: 13 * 1 + 13 * 1 + 6 * 2  + 8 * 5  + 9 * 4
 	divisor <- 114
 	augmented.data$connectedness.index <<- 100 * rowSums(augmented.data[,vars.connectedness.for.index]) / divisor
 	return(augmented.data$connectedness.index)
-	
+
 }
 
 sumIndex <- function() {
@@ -376,19 +376,48 @@ generateIndexChart <- function() {
 	sr <- data.frame(sort(sumResilience()))
 	ss <- data.frame(sort(sumConnectedness()))
 	sa <- data.frame(sort(sumIndex()))
-	sall <- cbind(sc, si, sr, ss, sa)
-	colnames(sall)[1] <- "Competencies"
-	colnames(sall)[2] <- "Interests"
+	sall <- cbind(sa, ss, sr, si, sc)
+	colnames(sall)[1] <- "Combined"
+	colnames(sall)[2] <- "Connectedness"
 	colnames(sall)[3] <- "Resilience"
-	colnames(sall)[4] <- "Connectedness"
-	colnames(sall)[5] <- "Combined"
+	colnames(sall)[4] <- "Interests"
+	colnames(sall)[5] <- "Competencies"
 	sall$id <- seq(1:length(sall$Competencies))
 
 	msc <- melt(sall, id = "id")
 
-	p <- ggplot(data=msc, aes(x = variable, y = value, colour=value)) + 
-		geom_bar(stat="identity", position = "fill") + 
-	    scale_colour_gradientn(colours=yawcrcPalette5) +
-	    coord_flip() 
+	p <- ggplot(data=msc, aes(x = variable, y = value, fill = value)) +
+		  geom_bar(stat="identity", position = "fill") +
+  	  scale_y_continuous(breaks=seq(0 ,1, 0.25), labels=seq(0, 100, 25)) +
+	    scale_fill_gradientn(colours=yawcrcPalette5) +
+	    coord_flip() +
+			labs(y = "Percentile scores", x = "", fill = "") +
+			theme(
+        # GRID
+        panel.grid.minor.y = element_blank(),
+        # panel.grid.major.y = element_blank(),
+        panel.grid.major.y = element_line(colour = foreground.color),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+
+        # BACKGROUND
+        panel.background = element_rect(fill = background.color, colour = foreground.color),
+
+        # TITLE
+        # plot.title = element_text(colour = title.color, lineheight=1.0, face="bold", size=graph.title.size),
+        axis.title = element_text(color=title.color, lineheight=1.0, size = axis.title.size),
+        # axis.title = element_text(lineheight=1.0, size = axis.title.size),
+        axis.title.x = element_text(size = axis.title.size, vjust = x.axis.vjust),
+        axis.title.y = element_text(size = axis.title.size, vjust = y.axis.vjust),
+
+        # LINE
+        axis.line = element_line(colour = "black"),
+
+        # TEXT
+        axis.text.x = element_text(color=text.color, size = axis.text.size),
+        axis.text.y = element_text(color=text.color, size = axis.text.size)
+        # axis.text.x = element_text(angle=45, vjust=1.0, hjust=1.0, size = axis.text.size),
+        # axis.text.y = element_text(angle=45, size = axis.text.size)
+    )
     return (p)
 }

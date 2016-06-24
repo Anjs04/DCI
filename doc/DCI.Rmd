@@ -706,11 +706,15 @@ _To what extent does education correlates with competencies and interests?_
 
  - Skills (Q431) by education level (Q436)
 
-```{r correlation-skills-educations, fig.width = 8, fig.height = 6, echo=FALSE}
+```{r correlation-skills-education, fig.width = 8, fig.height = 6, echo=FALSE}
 generateCorrelation("total.431", "Q436", "skills-education")
 ```
 
  - Interest (Q437) by education level (Q436)
+
+ ```{r correlation-interests-education, fig.width = 8, fig.height = 6, echo=FALSE}
+ generateCorrelation("total.437", "Q436", "interests-education")
+ ```
 
 
 _Relationship between occupation and aspects of digital capacities_
@@ -718,6 +722,7 @@ _Relationship between occupation and aspects of digital capacities_
  - Reasons for using internet (Q430) by occupation (Q8)
  - Interests: what type of info look for online (Q437) by occupation (Q8)
  - Connectedness: Providing help (Q277) or seeking help (Q280) by occupation (Q8)
+
 
 _Relationship between financial pressure and aspects of digital capacities_
 

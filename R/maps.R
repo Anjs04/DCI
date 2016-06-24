@@ -47,6 +47,7 @@ if (INIT_MAPS) {
 initAugmentedDataWithCoords <- function() {
   location = read.csv("data/LocationData.csv")
   location$postcode = as.character(location$postcode)
+  location[nchar(location$postcode)==3,]$postcode <- paste("0",location[nchar(location$postcode)==3,]$postcode, sep="")
   df = left_join(augmented.data, location, by = c("postcode" = "postcode"))
 
   # Wrong coordinates for resp 812, userid 2389477443
@@ -56,6 +57,8 @@ initAugmentedDataWithCoords <- function() {
 
   return (df)
 }
+
+
 
 
 
@@ -99,22 +102,36 @@ generateSA4Map <- function(x, vars, func, palette = yawcrcPalette) {
 
   aus.df = join(aus.points, merged5, by="id")
 
+  if (!is.na(func)) {
+    break.labels <- func()
+    break.points <- seq(1:length(break.labels))
+  } else {
+    # Assume 100-pt scale
+    break.labels <- as.character(seq(1, 99, 2))
+    break.points <- seq(1, 99, 2)
+  }
+
   # Plotting with merged data
-  g <- ggplot(aus.df) +
-    aes(x = long, y = lat, group = group, fill = median) +
-    #Don't want a legend with 150 variables so suppress the legend
-    geom_polygon() +
+  g <- ggplot(data = aus.df, aes(x = long, y = lat, group = group, fill = median)) +
+    geom_polygon()  +
+    scale_fill_gradientn(breaks = break.points, labels = break.labels, colors = palette) +
     #for some reason it maps too much ocean so limit coords (EDIT: due to Christmas Island)
     coord_equal(xlim = c(110,155)) +
-    scale_fill_gradient( ) +
     theme(
       panel.background = element_blank(),
       panel.border = element_blank(),
       axis.line = element_blank(),
       axis.text = element_blank(),
       axis.title = element_blank(),
-      axis.ticks = element_blank()
-    )
+      axis.ticks = element_blank(),
+      #family = "Times",
+      plot.title = element_text(color="#404040",
+                                size=14)
+      #, legend.title = element_blank()
+    ) + ggtitle(unlist(metadata$Name)) +
+    labs(title = "", fill = "Median Score")
+
+
 
   full.file <- paste("./figs/maps/", var.name, "_clusters.png", sep="")
 
@@ -154,29 +171,20 @@ generateScatterMap <- function(x, vars, func, palette = yawcrcPalette) {
   df <- augmented.data.with.coords
   df$var.name <- df[,var.name]
 
-  df$var.name = factor(df$var.name, labels=func())
+  if (!is.na(func)) {
+    df$var.name = factor(df$var.name, labels=func())
+  }
+  else {
+    df <- df[order(df$var.name),]
+  }
 
-  # p =
-  # ggplot(df) +
-  #   aes(lon, lat, colour = var.name) +
-  #   geom_point() +
-  #   coord_equal(xlim = c(110, 155), ylim = c(-45, -10)) +
-  #   scale_colour_gradient( high = "#132B43", low = "#56B1F7")
-
-  p =
+  p <-
     ggplot() +
 
     ###The Background Map###
-    #Don't want a legend with 150 variables so suppress the legend
-    #geom_polygon(data = aus.df,
-    #             aes(long, lat, group = group, fill = SA4_NAME11),
-    #             show_guide = FALSE ) +
     geom_path(data = aus.df,
               aes(long, lat, group = group, fill = SA4_NAME11),
               color="#DFDFDF") +
-    #for some reason it maps too much ocean so limit coords (EDIT: due to Christmas Island)
-    #scale_fill_hue(c=10,
-    #               l=90) +
     theme(
       panel.background = element_blank(),
       panel.border = element_blank(),
@@ -184,9 +192,9 @@ generateScatterMap <- function(x, vars, func, palette = yawcrcPalette) {
       axis.text = element_blank(),
       axis.title = element_blank(),
       axis.ticks = element_blank(),
-      plot.title = element_text(family = "Times",
-                                color="#404040",
-                                size=18),
+      #family = "Times",
+      plot.title = element_text(color="#404040",
+                                size=14),
       legend.title = element_blank()
       ) +
 
@@ -194,14 +202,22 @@ generateScatterMap <- function(x, vars, func, palette = yawcrcPalette) {
     geom_point(data = df,
                aes(lon, lat, colour = var.name),
                position = position_jitter(00.004, 00.004),
-               alpha = 0.05) +
+               alpha = 0.25) +
     coord_equal(xlim = c(110, 155),
                 ylim = c(-45, -10)) +
-    scale_colour_manual(values = palette) +
     ggtitle(unlist(metadata$Name)) +
     guides(colour = guide_legend(override.aes = list(alpha = 1,
                                                      shape = 15,
                                                      size = 10)))
+
+  if (!is.na(func)) {
+    p <- p + scale_colour_manual(values = palette)
+  }
+  else {
+    p <- p + scale_colour_gradientn(limits = c(0, 100), colours = palette)
+
+  }
+
 
 
   full.file <- paste("./figs/maps/", var.name, "_scatter.png", sep="")

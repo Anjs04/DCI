@@ -1,0 +1,121 @@
+
+
+#### Demographics
+
+_To what extent does education correlates with competencies and interests?_
+
+ - Skills (Q431) by education level (Q436)
+
+```{r correlation-skills-educations, fig.width = 8, fig.height = 6, echo=FALSE}
+generateCorrelation("total.431", "Q436", "skills-education")
+```
+
+
+
+ - Interest (Q437) by education level (Q436)
+
+
+_Relationship between occupation and aspects of digital capacities_
+
+ - Reasons for using internet (Q430) by occupation (Q8)
+ - Interests: what type of info look for online (Q437) by occupation (Q8)
+ - Connectedness: Providing help (Q277) or seeking help (Q280) by occupation (Q8)
+
+_Relationship between financial pressure and aspects of digital capacities_
+
+ - Financial pressure generally (Q45)
+ - Financial pressure from digital access (Q425)
+ - Low income (Q9_214)
+
+
+_By competencies and interests: uses of the internet (Q74), what you look for (Q437), reasons for use (430)_
+
+_By resilience: attitude twds harm/risk (Q435)_
+
+_By connectedness: relationships (Q287), frequency of connecting (Q343)_
+
+_Minority groups_
+
+ - Interests: what type of info look for online (Q437) by minority grps (Q9)
+ - Seeking help (Q280) by minority grp (Q9)
+ - Minority groups (Q9) by current location (Q427)
+ - Are gender differences more pronounced in some grps?
+
+_Families_
+
+ - Does gender have an effect for different types of families?
+ - 'families': analyse by size of household (Q24), sole parents (Q9_215), households with children (CH1) (look at 5-17 especially?)
+ - Household with children + CALD(Q9_212)/Indigenous(Q9_218)
+
+
+#### Competencies / Interests
+
+_To what extent various levels of competencies (use + skills) translate into knowledge sharing?
+Higher level of competencies into providing help and/or lower level into seeking help_
+
+ - Helping others (Q277) by skills (Q431), use (Q74)
+ - Seeking help (Q280) by skills (Q431), use (Q74)
+ - At statement level, social media:
+    - 74_7 use social media
+    - 431_23 update status
+    - 431_24 upload onto social media
+    - 277_113 help set up social media account
+    - 280_125 sought help to set up social media account
+ - At statement level, safety
+    - 431_32 find info on how to use internet safely
+    - 431_38 restrict access to adult content
+    - 431_42 anonymise
+    - 277_120 help on how to stay safe
+    - 280_132 been shown how to stay safe
+
+_Can different uses of the internet (Q74), different interests (Q437) or reasons for use (Q430) help identifying profiles or types of engagement?
+How do different uses/interest (types of engagement) correlate to different types, or level, of resilience and connectedness?
+_
+
+#### Resilience/safety
+
+_Does higher level of use lead to increased exposure to risk? Does lower level of skills mean increased exposure to risk?_
+
+ - Correlation between use (Q74) and resilience (Q435)
+ - Correlation between use (Q74) and risks (Q434)
+ - Between skills (Q431) and resilience (Q435)
+ - Find information on using the internet safely (431_32) by attitude twds harm/risk (Q435)
+
+_How does risk exposure impact on attitude towards risks/harms?_
+
+ - exposure to potential harm (Q434_91, 92, 93) by attitude twds harm/risk (Q435)
+
+
+#### Connectedness
+
+Exploring technology as an enabler of social connectedness.
+
+Can digital technology facilitate settling into new location and/or establish social/community network?
+ - current location (Q427). Combine 179+180+181 into <6 months to get a sample of 218
+   - made new friends/met new people online (Q343_149)
+   - info on gvt serv (Q437_51)
+ - 280_126 help to find info and resources
+
+_How/to what extent does tech support social connectedness of minority grps?_
+
+ - learn new things about my ethnic grp (341_57)
+   - by CALD (Q9_212), Indigenous (Q9_218), Refugees (Q9_213), Homeless? (Q9_220)
+ - 	Find people of similar age/interests online (Q341_55)
+   - by gender (check sig)
+   - by age (correlates, but 35+ do not disagree more rather N/A increases: check with 35+ with higher competency/use?)
+   - by minority groups
+
+_focus on social media as a very specific online activity to explore connectedness and resilience_
+
+ - Use of soc media (74_7) in relation to connectedness, and to resilience (428, 434_92, 277_122)
+ - Interacting using text or IM (431_25) in relation to connectedness
+
+#### Notes
+
+Best to not use hypotheses at high level (4 critical issues): very likely to find that more competencies correlates with more interested, more connected, better support, more resilient...
+But at a lower level: are there diff types of resilience, do types of competencies lead to better/more supportive networks?
+within those 4 areas: need to classify types of skills, types of support networks etc.
+
+In a previous conversation, we had discussed the different uses of the internet: from a more informational/technical use to a more emotional/social involvement, with the overarching question/hypothesis: does the emotional/social use lead to increased connectedness, and in turn to increased resilience?
+
+Those two ‘types’, informational and social, can be applied across the 4 critical issues and many of the survey questions. Within each questions, below are the variables that I think best outline one or the other.

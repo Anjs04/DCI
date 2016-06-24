@@ -1,5 +1,5 @@
 ---
-title: "Digital Capacities Index"
+title: "How to measure a changing subject? Towards a digital capacities index"
 author: |
   | Liam Magee^1^, Delphine Bellerose^1^, Anjali Sharma^1^, Emma Kearney^1^, Louise Crabtree^1^, Philippa Collin^1^, Justine Humphry^1^, Paul James^1^, Tanya Notley^1^, Amanda Third^1^, Samantha Yorke^2^
   | 1. Western Sydney University
@@ -14,8 +14,8 @@ output:
     theme: united
     highlight: tango
   word_document:
-    toc: true
-    toc_depth: 4
+    toc: false
+    # toc_depth: 4
 ---
 
 
@@ -30,6 +30,7 @@ Word count (exclusive): 8,000
 
 
 ```{r setup, include=FALSE, echo=FALSE}
+library(knitr)
 library(captioner)
 library(pryr)
 
@@ -38,7 +39,7 @@ knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE)
 setwd("..")
 
 
-source("R/main.R", FALSE)
+source("R/main-with-init.R", FALSE)
 PRINTING <- FALSE
 
 # Set to false for non-HTML (e.g. word, pdf) outputs
@@ -59,7 +60,7 @@ PLOTLY <- FALSE
 fig_nums <- captioner(prefix = "Figure")
 cf <- partial(fig_nums, display = "cite")
 fig_nums("age.freq", "Age Frequency")
-fig_nums("gender.freq", "Gender Frequency")
+# fig_nums("gender.freq", "Gender Frequency")
 fig_nums("gender.and.age.freq", "Age & Gender Frequency")
 fig_nums("gender.and.age.freq.abs", "Australia's Age & Gender Frequency (ABS 2014)")
 fig_nums("location.freq", "Location Frequency")
@@ -67,13 +68,13 @@ fig_nums("location.freq", "Location Frequency")
 # Competencies
 fig_nums("freq.74", "Frequency of online activity")
 fig_nums("freq.431", "Perceived ease of conducting online activity")
-fig_nums("freq.74.2", getLabel(2, vars.competencies.online.activities.74))
-fig_nums("freq.74.3", getLabel(3, vars.competencies.online.activities.74))
-fig_nums("freq.74.6", getLabel(6, vars.competencies.online.activities.74))
-fig_nums("freq.74.2", getLabel(2, vars.competencies.online.activities.74))
-fig_nums("freq.431.13", getLabel(13, vars.competencies.431))
-fig_nums("freq.431.14", getLabel(14, vars.competencies.431))
-fig_nums("freq.431.19", getLabel(19, vars.competencies.431))
+# fig_nums("freq.74.2", getLabel(2, vars.competencies.online.activities.74))
+# fig_nums("freq.74.3", getLabel(3, vars.competencies.online.activities.74))
+# fig_nums("freq.74.6", getLabel(6, vars.competencies.online.activities.74))
+# fig_nums("freq.74.2", getLabel(2, vars.competencies.online.activities.74))
+# fig_nums("freq.431.13", getLabel(13, vars.competencies.431))
+# fig_nums("freq.431.14", getLabel(14, vars.competencies.431))
+# fig_nums("freq.431.19", getLabel(19, vars.competencies.431))
 
 # Interests
 fig_nums("freq.437", "General Interests")
@@ -81,27 +82,41 @@ fig_nums("freq.341", "Interest in seeking difference")
 fig_nums("freq.352", "Interest in fitness and health improvement")
 fig_nums("freq.353", "Health Impacts")
 fig_nums("freq.430", "Interest in keeping in touch")
-fig_nums("freq.437.1", getLabel(1, vars.interests.general.437))
-fig_nums("freq.437.9", getLabel(9, vars.interests.general.437))
-fig_nums("freq.352.4", getLabel(4, vars.interests.fitness.352))
+# fig_nums("freq.437.1", getLabel(1, vars.interests.general.437))
+# fig_nums("freq.437.9", getLabel(9, vars.interests.general.437))
+# fig_nums("freq.352.4", getLabel(4, vars.interests.fitness.352))
 
 
 # Resilience
 fig_nums("freq.434", "Frequency of harmful events")
 fig_nums("freq.435", "Responses to statements about online harms")
 fig_nums("freq.428", "Willingness to engage with others")
-fig_nums("freq.434.4", getLabel(4, vars.resilience.harm.events.434))
-fig_nums("freq.434.10", getLabel(10, vars.resilience.harm.events.434))
-fig_nums("freq.435.6", getLabel(6, vars.resilience.harms.agreement.435))
-fig_nums("freq.435.7", getLabel(7, vars.resilience.harms.agreement.435))
+# fig_nums("freq.434.4", getLabel(4, vars.resilience.harm.events.434))
+# fig_nums("freq.434.10", getLabel(10, vars.resilience.harm.events.434))
+# fig_nums("freq.435.6", getLabel(6, vars.resilience.harms.agreement.435))
+# fig_nums("freq.435.7", getLabel(7, vars.resilience.harms.agreement.435))
 
 # Connectedness
 fig_nums("freq.343", "Maintaining connections")
 fig_nums("freq.287", "Importance of online life in maintaining relationships")
 fig_nums("freq.429", "Attitudes towards Technology")
-fig_nums("freq.287.1", getLabel(1, vars.connectedness.maintenance.287))
-fig_nums("freq.343.4", getLabel(4, vars.connectedness.events.343))
-fig_nums("freq.429.2", getLabel(2, vars.connectedness.tech.attitudes.429))
+# fig_nums("freq.287.1", getLabel(1, vars.connectedness.maintenance.287))
+# fig_nums("freq.343.4", getLabel(4, vars.connectedness.events.343))
+# fig_nums("freq.429.2", getLabel(2, vars.connectedness.tech.attitudes.429))
+
+
+# Multivariate analysis
+fig_nums("pca.variable.scree", "PCA by Variable - Variances")
+fig_nums("pca.variable", "PCA by Variable - First 2 Components")
+fig_nums("corrections.exploratory", "Exploratory Correlations - By Variable")
+# fig_nums("pca.questions.scree", "PCA by Question - Variances")
+# fig_nums("pca.questions", "PCA by Question - First 2 Components")
+# fig_nums("corrections.exploratory.totals", "Exploratory Correlations - By Question")
+
+# Index charts
+fig_nums("index.chart", "Aggregated results by critical issue")
+fig_nums("index.cluster.chart", "Aggregated results by region (SA4) median scores")
+fig_nums("index.scatter.chart", "Aggregated results by location of individual response")
 
 
 # Aggregated
@@ -111,107 +126,627 @@ fig_nums("agg.results", "Aggregated Results by Critical Issue")
 
 
 
-# Digital Capacities Index
+## Abstract
+
+TBD
+
+
+### Keywords: Digital capacities, interests, competencies, resilience, connectedness
+
 
 ## Introduction
 
-Much has been made of the transition, in 2008, of more than half the world's population to urban settlements. Far more dramatic, in terms of time and acceleration, has been the 'onboarding' of more than half the world's population to some kind of digital life - predominantly through the extraordinary rise of low cost smart phones in Asia, and to lesser degrees, Africa and Latin America. Young people in slums and informal settlements in Bangladesh are likely to play the same games - Candy Crush or Clash of Clans - and use the same social networking apps - WhatsApp, Facebook Messenger - as their peers in traditional centres of technological innovation, San Francisco, London or Tokyo.
+Much has been made of the transition in 2008 when a person somewhere in the world moved into a city to shift the demographic balance of the world's population to urban living. However, far more dramatic in terms of time and acceleration has been the rate to which more than half the world's population have become immersed in some form of digital life. This rate has been hastened through the extraordinary rise in the new millennium of low cost smart phones and cheap WiFi in Asia, Africa and Latin America. In the decade 2005-2015, the International Telecommunications Union estimates that while global mobile subscriptions grew by more than 300 per cent, in Asia and Africa these rates were considerably higher - 448 per cent and 785 per cent respectively ^[http://www.itu.int/en/ITU-D/Statistics/Pages/stat/default.aspx - ref properly]. In March 2016, Ericsson reports global mobile subscriptions stand at 7.4 billion, equivalent to one for each person on the planet ^[http://www.ericsson.com/mobility-report/mobile-subscriptions ; http://www.worldometers.info/world-population/ - ref properly]. Nearly half of these, 3.2 billion subscriptions, are for so-called 'smartphones', and provide their owners with some level of access to digital content and data ^[http://www.ericsson.com/mobility-report/mobile-subscriptions]. More people still, access the Internet through household or shared devices, fixed line subscriptions, or communal terminals in libraries and Internet cafes.
 
-This phenomenal growth has been matched by an interest in measuring different facets of what is unquestionably now a globalised digital society. Since the 2000s, the measurement of digital life has developed markedly. Studies of digital connectivity [cite], access [cite], inclusion [cite], use [cite], competencies [cite], skills [cite], engagement [cite], and risk and resilience [cite] illustrate the growing complexity of patterns of digital behaviour among diverse communities, countries and regions. At the same time, this complexity risks obscuring broader patterns of digital life amid studies that focus on measurement of highly particular dimensions. This risk becomes acute as the forms of use of digital technologies have themselves become more pervasive as well as more diverse. Use of devices, platforms, apps and methods of interaction expand and, periodically, contract around new products, services and standards. Home, work and in-transit digital technologies - from mobile devices to virtual reality sets, CCTV surveillance cameras, in-flight entertainment systems, public sensors, 'smart' fitness devices and home automation systems - increasingly blur categories of explicit 'use' and 'non-uses'. As Bratton [cite] has argued, we are all 'users' now.
+This rate of digitisation can be considered a further layer of intensifying globalisation, even as the new millennium has brought a giddying reemergence of neo-nationalism, economic protectionism and border securitization [@kennedy2010local]. The globalizing proliferation of digital devices and their associated carrying capacity, well testified to in recent infrastructural studies [e.g. @edwards2009introduction, @parks2015signal, @reading2015materiality], does not imply the erasure of local frictions, bumps or discontinuities that Friedman [-@friedman2006world], Fukuyama [-@fukuyama2006end] and other global enthusiasts once predicted. Yet it is not without its universalizing effects. Though still sharply differentiated in terms of availability and access, young people in slums and informal settlements in Bangladesh are as likely to communicate with the same social networking apps - _WhatsApp_, _Facebook Messenger_ - and play the same games - _Candy Crush_ or _Clash of Clans_ - as their peers in well-recognised centres of technological innovation, in San Francisco, London or Tokyo. In the ICT industries, increasingly indissociable from other professional fields, patterns of outsourcing, consultation and collaboration build upon these collective and formative digital capacities and dispositions.
 
-How then might a general empirical social analysis of the digital proceed? We argue that the preoccupation with specifically measurable qualities of digital infrastructural availability and individual interactions need to regrouped and reframed within a more comprehensive theoretical rubric. The rubric we suggest here employs the vocabulary of 'capacities'. Capacities capture something of the wide and open conntations of human capabilities, developed by Amartya Sen and Martha Nussbaum [cite]. At the same time, the term also captures the technical quantitiatve capacities inherent in the digital world. Bandwidth, hard drives, memory and telecommunication networks all can be readily described in terms of capacity, meaning simply the quantitiative expansion possible within digital infrastructure. Capability, for all its resonance in the development literature, acquires more specific meaning in relation to digital equipment, and even then not universally: while complex networks have capabilities, raw qualities such as bandwidth instead express at best *single* capability. As we discuss further in *Methodology* below, this feature of translatability is an important for devices which seek to measure a varied, multidimensional and diverse set of sociotechnical variables. *Capacities* is the term which best seems to meet this demand. We stress however that, applied at societal and individual units of analysis, our use of 'capacity' has similar associations to Sen's *Capabilities Approach*.
+This epochal shift in communicative and informational access has been matched by an interest in assessing different facets of what is unquestionably now a globalized digital society. Since the 2000s, the measurement of digital life has developed markedly. Studies of digital connectivity [@katz2016towardsmeaningfulconnectivity,], access [@barzilainahon2006gapsandbits, @vandijk2003digitaldivide], inclusion [@walton2013digitalinclusion, @mervyn2014digitalinclusion, @yelland2013digitalsocialinclusion, @wellman2001socialcapacity], use [@smith2013digitalnative], competencies [@ferrari2012digitalcompetence], skills [@litt2013internetskills], engagement [@litt2013internetskills], and risk and resilience [@notten2016risks] illustrate the growing complexity of patterns of digital behaviour among diverse communities, countries and regions. At the same time, amid the plethora of studies that focus on measurement of highly particular dimensions, such complexity risks obscuring broader patterns of digital life. This risk becomes acute as the forms of use of digital technologies have themselves become more pervasive and diverse. Use of devices, platforms, apps and methods of interaction expand and, periodically, contract around new products, services and standards, in rhythm with the regularised and syncopated release cycles of major vendors. Home, work and in-transit digital technologies -- from mobile devices to virtual reality sets, CCTV surveillance cameras, in-flight entertainment systems, public sensors, 'smart' fitness devices and home automation systems -- increasingly blur categories of explicit 'use' and 'non-uses'. As Bratton [-@bratton2014black] has argued, we are all 'users' now.
 
-In this article we propose a general theoretical account of digital capacities. This account is however complicated by its goal of generality. Both the direct speed of technological change, and varied or differential pace of that change, mean that methodological instrumentation of theories are subject to considerable revision across time and space. At least some of our collective digital capacities alternate at the rate of hardware developments and software releases - that is, at the rate of days, weeks or months, rather than across years or decades. This contrasts with other forms of social capacities, such as language use, mathematical competency or political engagement, which vary in line with the slower pace of education diffusion, policy reform and economic development.
+How then might a general empirical social analysis of the digital proceed? We argue here that the preoccupation with specifically measurable qualities of digital infrastructural availability and individual interactions needs to be reframed within a more comprehensive theoretical rubric. The rubric we suggest is oriented around the key concept of 'capacities', selected because they connote both the general and generative capacities of technology users, but also productive capacities of technical objects. Bandwidth, hard drives, memory and telecommunication networks, for instance, are frequently referenced and measured in terms of capacities.
 
-Similarly, the rates of digital capacity occur across extremely complex social vectors. The expansion of programming skill - a highly developed digital capacity - through coding clinics, hackathons, interpretive scripting environments and broader social pressures to 'learn to code' represent a salient example. Since definitions of 'programming' vary from full-time professionals to occasional 'hackers' or 'script junkies', worldwide estimates of programmers are impossible to estimate precisely. However indicators are available from popular code repositories such as GitHub [GitHub], and technical Q&A fora, such as [Stack Overflow](http://stackoverflow.com/). As of April 2014, *GitHub* reports [14 million users](https://github.com/about/press), while Stack Overflow reports 4.5 million registered ['programmers'](http://stackoverflow.com/). Both are likely underestimates; many programmers do not use these sites, or access them anonymously. Regardless of precision these numbers represent order-of-magnitude increases over approximate estimates in the 2000s (approximately 5 million) and 1990s (under 1 million). Yet the diffusion of programming skills also follow broad trajectories of geography, education, availability of digital infrastructure: entry to the programming profession corresponds strongly to availability of tertiary education, affordable hardware, software and the Internet, and clusters of investment in technological innovation. As [] note, programmers also are sharply skewed demographically and geographically: male gendered, middle class, and urban residents.
+In the social field, capacities can incorporate other key concepts employed in the digital measurement literature: the capacity to connect, the capacity to develop competencies, the capacity to engage, and so on. Significantly for a general theory of digital capacity measurement, the close semantic proximity of 'capacity' to 'capability' also concords with the extensive work on 'human capabilities' by Sen [-@sen1999freedom], Nussbaum [-@martha2011creating], and others. While our own theoretical paradigm, the subject of ongoing work, differs substantially from the specific capabilities suggested by Nussbaum [-@martha2011creating], this proximity points to the potential alignment of digital capacity indexes with broader societal measures such as the _Human Development Index_, informed by Nussbaum and Sen's *Capabilities Approach*. As we discuss further in our methodology below, this feature of conceptual translatability is significant for mesauring a multidimensional and diverse set of sociotechnical variables. *Capacities* is the term which best seems to meet this demand, and we discuss below the challenges and one potential approach for developing a substantive account of what these capacities might be.
 
-This example highlights that digital capacities are not only spread spatially; this spatial distribution is also mutating rapidly. In 2010, @takhteyev2010investigating noted the top ten countries responsible for GitHub contributions included, in order, USA, UK, Germany, Canada, Brazil, Japan, France, Australia, Russia and Sweden. An estimate conducted on the last available public data of location, in the month of December 2010, showed users by country now included China, India and the Netherlands, at the expense of Brazil, Russia and Sweden, which nevertheless show growth in absolute numbers.
-
-Responding to the prevalence of digital infrastructure, technology education and lower costs of devices and access, these figures index the global growth and relative geographic change of digital capacity. Numerous other trends, both endogenous and exogenous to the tech industry, also impact how capacity is configured. In-built product obsolescence, switches from desktop to mobile apps, ease of accessing social media apps and networks, increases in automation and improvements in design mean certain capacities are more readily acquired, while others become forgotten or obscured.
-
-Our definition and analysis of digital capacities foregrounds two implications of this conceptual volatility. The first implication is that any specific measureable dimension of capacity is likely to have limited 'shelf-life' in terms of relevance, both over time and across regions. This suggests the need for intermediary levels of analysis between these measures and any definition of capacity itself. It further suggests that while direct measures may not be replicable, both these intermediary levels and the process of selecting those measures may have greater prospect for reuse across different spatiotemporal frames.
-
-The second implication draws upon the exogenous social factors that impact upon the development of digital capacities. Policy change, community orientations, geographic proximity to centres of technology, and economic investment, particularly in infrastructure and innovation, act as spurs to the production of new capacities. It is a truism, bourn out in recent STS qualitative analyses of households, communities and workplaces, that technology skills not develop in isolation of their social context. Yet this relational dimension is underplayed in recent quantitative studies of skills and competencies in particular. In our own survey instrument, we seek to draw out the importance of various aspects of this relationality.
-
-We elaborate upon both of these implications in our account of digital capacities below. We then discuss a pilot study that operationalises that account through a pilot survey of 2,000 Australian individuals. We present in some detail our procedure for arriving at a set of four themes, or what we term "critical issues", and associate variables or indicators of capacities. We then present the results of the study, highlighting significant findings by demographic variables and relationships. We conclude with observations on what these results say about digital capacities of Australians in 2016, and on the methodological prospects for adapting the instrument to measure capacities in other times and places.
-
+<!--
+At a similar level of abstraction, but operating from a different theoretical paradigm to Nussbaum's [-@martha2011creating] suggested capabilities, we have adopted here a 'social capacities' developed by James [cite] as part of the _Circles of Sustainability_ approach
+ is instead built around four basic _social capacities_ —- vitality, relationality, productivity, and sustainability —- each of which is associated with variable virtues. These capacities, elaborated by James [cite] as part of the _Circles of Sustainability_ approach, motivates and intersects with the specific _digital_ capacities we develop further below.
+ Secondly, the broader concept of 'capacities' goes beyond the _Capabilities Approach_ to include non-humans, but without being applicable to all things in the same way. In our approach, the concept of capacities acquires specific meaning in relation to digital technologies. While complex, technologically extended and human networks have _social capacities_, raw qualities such as bandwidth instead express at best a *single* capacity.
+-->
 
 <!--
 
-These results were broadly confirmed by more extensive analysis conducted in October 2014 by data analyst Nikita S. Nikitinsky on a [blog post in June 2015](http://nlpx.net/archives/172).
+, but without reducing such capacities to those carried by individuals through their liberal emphasis on individuals and freedom as the base of all politics: ‘It is _focused on choice or freedom_ [Nussbaum’s emphasis], holding that the crucial good [that] societies should be promoting for their people is a set of opportunities, or substantial freedoms’ [@martha2011creating, p. 18]. This, in our view, is a fundamentally reductive view of the human condition. The compound problem is that freedom in Nussbaum’s hands is both given an intrinsic and primary value (a reductive claim), and, at the same time, it is treated as a contingent negotiated relation in tension with other virtues, particularly justice and rights (an inconsistent claim) ^[Later in the same book she writes: ‘it is unclear whether the idea of promoting freedom is even a coherent political project. Some freedoms limit others’ (p. 71). Hence some freedoms are more important in her approach that others. However, if this is the case — namely, freedom needs to be qualified by just negotiation over what are the important freedoms, then the negotiation and justice is as an important basis for thinking capabilities as freedom.].
+-->
+
+
+## Digital capacities: Rapidly changing ubiquity
+
+The growing prevalence of digital capacities motivates our efforts to develop a general method for measuring them. Our account is, however, complicated by its goal of generality. Both the rate of technological change, and the varied or differential pace of that change, mean that methodological instrumentation of theories is subject to considerable revision across space and time. At least some of our collective digital capacities change at the rate of hardware developments and software releases - that is, at the rate of days, weeks or months, rather than across years or decades. This contrasts with many other forms of individual or social capacities, such as the abilities to learn languages, to improve health outcomes, or to participate in political life, which vary in line with the slower pace of education diffusion, policy reform and economic development.
+
+Similarly, the rates of digital capacity occur across complex social vectors. The expansion of programming skills -- a highly developed digital capacity -- through coding clinics, hackathons, interpretive scripting environments and broader social pressures to 'learn to code' represent a salient and highly instructive example. Since definitions of 'programming' vary from full-time professionals to occasional 'hackers' or 'script junkies', worldwide estimates of programmers are difficult to estimate with precision. Some indication of gross numbers can be obtained from user metrics on popular code repositories such as GitHub [GitHub], and technical Q&A fora, such as [Stack Overflow](http://stackoverflow.com/). As of April 2014, *GitHub* reports [14 million users](https://github.com/about/press), while _Stack Overflow_ reports 4.5 million registered ['programmers'](http://stackoverflow.com/). Both are likely underestimates. Many programmers do not use these sites, or access them anonymously. Despite the imprecision, these numbers represent order-of-magnitude increases over approximate estimates in the 2000s (approximately 5 million) and 1990s (under 1 million). Yet the diffusion of programming skills also follow broad trajectories of geography, education, availability of digital infrastructure. Entry to the programming profession corresponds strongly to availability of tertiary education, affordable hardware, software and the Internet, and clusters of investment in technological innovation. Programmers also are sharply skewed demographically and geographically: male gendered, middle class, and urban residents ^[Need citation]. Yet even this characteristic has locational variation: as Poster [-@poster2013global] notes in a comparative study of gender in American and Indian IT firms, 'the masculine “cultures of engineering” often cited in the US literature are weaker in my _Indian_ cases'.
+
+These illustrations index the global growth and relative geographic change of digital capacity. Numerous other trends, both endogenous and exogenous to the tech industry, also impact how capacity is configured. In-built product obsolescence, switches from desktop to mobile apps, ease of accessing social media apps and networks, increases in automation and improvements in design mean certain capacities are more readily acquired, while others become forgotten or obscured.
+
+Our definition and analysis of digital capacities foregrounds two implications of this conceptual volatility. The first implication is that any specific measureable dimension of capacity is likely to have limited shelf-life, both over time and across regions. This implies the need for intermediary categories of analysis to mediate between these measures and any generalized definition of capacity itself. It further suggests that while application of direct measures may not be replicable, both these intermediary levels and the very process of selecting those measures may have greater prospect for reuse across different spatiotemporal frames.
+
+The second implication draws upon the exogenous social factors that impact upon the development of digital capacities. Policy change, community reorientation, geographic proximity to centres of technology, and economic investment, particularly in infrastructure and innovation, act as spurs to the production of new capacities. It is now a truism, borne out in recent STS qualitative analyses of households, communities and workplaces, that technology skills do not develop in isolation of their social context ^[cite counter-determinist references]. Due in part to their different emphases, this relational dimension has been comparatively underplayed in recent quantitative studies [e.g. @livingstone2010risks @helsper2012corresponding, @humphry2014importance]. In our own survey instrument, we draw out the importance of various aspects of _relationality_ in greater detail.
+
+We elaborate upon both of these implications in our account of digital capacities below. We then discuss a study that operationalizes that account, as part of a larger research project, through a survey of 2,000 Australians. We present in some detail our procedure for arriving at a set of four capacity themes, or what we term "critical issues", and associate variables or indicators. We then present the results of the survey, highlighting significant findings by demographic variables and relationships. We conclude with observations on what these results say about digital capacities of Australians in 2016, and on the methodological prospects for adapting the instrument to measure capacities in other times and places.
+
+
+
+## Towards an approach for defining changing digital capacities
+
+<!--Acknowledging the dynamic nature of digital capacities, we argue -->
+Defining digital capacity is a necessarily changing and iterative task, one that withstands the temporariness of specific measures and indicators. Our approach draws from the substantive literature on indicators developed in recent community indicator and social sustainability studies [e.g. @fraser2006bottom, @holden2013sustainability, and @james2014urban]. In spite of the distinct difference in domain, this literature seeks to address many of the concerns we raised earlier. First, it recognises that meanings of sustainability are changing and contested across geographical and temporal boundaries. Significant issues for one community or social group may be minor for another, and with the passing of time, these issues may become more or less relevant even within the same community setting. As much as there are strong demands for standardization and comparability in sustainability measurement, indicators must also evolve in line with the issues that matter [@magee2012issues]. Second, and in keeping with the open definitions of sustainability, this literature has argued that the procedures for selecting, weighting and applying indicators ought to include diverse community and expert stakeholders -- they must, in other words, support "bottom-up" as much as "top-down" processes of deliberation [@fraser2006bottom]. Third, the choice of measures should be open to frequent iteration and revision. Indicators that fail to communicate with communities must be revised for those that do.
+
+In the very different context of digital capacities, these affordances still hold considerable weight, and we argue some degree of context sensitivity is equally important to measurement in this field. Of the numerous methods for indicator development, we adopted 'Circles of Sustainability' [@james2014urban] on the basis of some of the authors' familiarity with the approach in urban fieldwork. Used by the United Nations Global Compact Cities Programme, the World Association of Major Metropolises, World Vision, FIABCI, UCLG, and a number of local governments to support their engagement in cities, the approach treats social life as made up of four key domains of economy, ecology, politics and culture [@james2014urban]. It also proposes a sequential, iterative and consultative process for selecting and refining measures -- one which accords well with our own understanding of digital capacities as a volatile object of measurement.
+
+The approach further suggests that two lower order constructs -- _issues_ and _indicators_ -- be developed through two related consultative sessions during a design phase of measurement tools. In urban community settings, the purpose of the first session, termed an "Issue Selection" workshop, is to solicit, consult and examine the key areas of concern -- and related objectives to be pursued -- for the community of interest. The second session, termed an- "Indicator Ratification" workshop, selects and decides upon a series of specific indicators to measure progress towards those objectives. Between and after those two events, the project team collates, drafts and finalizes the indicators. Both issues and indicators can be developed organically, through a combination of further community consultation, reference to existing literature and empirical validation.
+
+The end-product of this process is one or more measurement instruments. These can be both qualitative and quantitative: administered to people, in the case of subjective or person-centric measures, or applied to objects, in the case of objective or environment-centric measures; and developed through secondary as much as primary sources, in the case of existing official, academic or publicly available data. Results from these measurements chart a series that indicates variation and progress towards objectives over time [@james2014urban].
+
+In outlining our application of this approach in our 'Methods' section below, we make several adaptations that reflect the theoretical distinctions between sustainability and digital capacities, along with the specific conditions of our study. In particular we adapt and extend recent literature on measures of digital competencies, safety, inclusion and engagement, as we discuss further below. We identify and align relevant indicators against each of the four domains, to produce a series of economic, ecological, political and cultural indicators that at the same time correspond, where possible, to prior studies of relevant capacities.
+
+As our unit of analysis -- households across the continent of Australia -- was broad and dispersed, we also did not include community representatives in our issues and indicator workshops. Instead, after the first of our workshops, we conducted a series of household visits and interviews with a diverse group of eight families. Results of these studies informed our second workshop and the subsequent survey design and pilotting. As we argue above, sensitivity to technological, cultural and geographic contexts are critical to any measurement of digital capacitiy. In addition to the direct findings of our study, therefore, our concluding observations also reflect upon these adaptations, and particularly upon the feasibility of a reusable and repeatable _process_ -- rather than _instrument_ -- for the ongoing measurement of digital capacity.
+
+
+
+## Measuring the digital capacities of Australian residents
+
+
+### Selecting Issues
+
+In line with other studies of digital measurement, our central device for measuring digital capacities is a survey administered to a representative sample of Australian residents. We employed an online panel provider to recruit participants. The panel provider was asked to ensure the sample was weighted by age, gender and location, where the latter was represented by Australian postcode. We also requested a boosted sample of young people aged 12-17, so we could undertake analysis of how digital capacities are developing among Australian youth. That analysis, along with detailed study of capacities by other demographic variables, is beyond the scope of the present work.
+
+Data collection took place in February 2016. Prior to this, we conducted a series of activities in line with the recommendations of the _Circles_ approach. First we conducted a general scan of literature relating to digital capacities and a broad range of cognitively associated terms commonly attached to the _digital_: accessability, divide, inclusion / exclusion, experience, safety, competencies, literacy, "nativity", regulatory environments, and comparative digital development. As the last term suggests, we sought to incorporate non-social measures of digitality, such as the market and technological availability of capacities. We then conducted an initial "issues" workshop with six members of the project team to develop key areas or "critical issues" relating to digital capacities. This produced a set of ten such issues that could be used to group more specific variables and measures. We outline each of these, with brief descriptions, in the list below:
+
+ - Situations and Demography: the demographic characteristics of individuals, including their access to digital technology.
+ - Interests: the considerations that motivate individuals to use digital technologies.
+ - Competencies: the skills and abilities that individuals possess for technically using digital technologies.
+ - Resilience: the responses to risks and harms that individuals experience when using digital technologies, and how they manage these risks.
+ - Social connectedness: the density of interaction that individuals have with others, both online and offline as they develop and use their competencies.
+ - Engagement: the contact that individuals have with both digital technologies and other economic, political, cultural or ecological issues through those technologies.
+ - Inclusion: the participation and access of individuals and social groups in forms of digital activity.
+ - Policies: the state of legal frameworks supporting access, skill development and other forms of digital participation.
+ - Infrastructures: the level and quality of development of digital technology (including the cost, availability and speed of broadband and Wifi connectivity, and the availability of routers, modems, cabling, devices and software)
+ - Consequences: the impacts of using digital technology, including generation of e-waste and pollution, costs of technology change, and increased surveillance and invasion of privacy.
+
+Collectively these issues emcompassed, in our view, a wide range of what we mean by "digital capacities" in Australia in 2016 ^[In further work we are developing a theoretical account of "social capacities" -- vitality, relationality, productivity and sustainability -- that are connected to these digital capacities, but which we intend to be more durable and encompassing. These social capacities provide an account that allows digital capacities to mapped to general social metrics such as the _Human Development Index_.]. They cover a range of key dimensions: positive as well as negative aspects of technology use; individual and social characteristic; and both human and non-human, or technical, types of capacities. However this effort at comprehensiveness proved too large for instrumentation into a single survey that could be administered in an online environment. Certain issues -- particularly _policies_ and _infrastructures_ -- were also not amenable to measurement through a survey, due to varying levels of awareness among a broad population.
+
+To refine the original list of issues, and to help identify particular measures relevant to the current Australian context, we drew upon findings from our interviews with eight families. We reduced this original set to a shorter set of five issues: _situations_, _interests_, _competencies_, _resilience_ and _Social connectedness_, of which _situations_ refers to the demographic and largely non-subjective attributes of our sample. These interviews highlighted the strong interdependence of capacities within households. Family members shared devices, helped eachother with connectivity and other technical issues, and spent considerable time in communal living areas engaging with their devices -- contrary to some arguments about the isolating effects of technology. This suggested that what we term 'connectedness' (one aspect of our broader definition of _relationality_), which extends to neighbourly, communitarian and online social interactions, might play a similarly vital role in the development of digital dispositions in our survey sample. Further, our preliminary review suggested that this relational and supportive capacity has been comparatively neglected in existing measurement literature on capacities and related terms. This reliance upon others in physical or digital proximity therefore warranted particular attention in our own study.
+
+For other issues, the process of selection was more straightforward. _Situations_ characteristics allowed for analysis of capacities by demographic and financial wellbeing. _Interests_ and _competencies_ were motivated by our desire to understand why, and how well, individuals interact with digital technologies. Our interest in _resilience_ reflected a topical interest in both the risks individuals -- particularly young people -- are exposed to through their online activities, as well as their capacities to explore opportunities for personal and social development.
+
+
+### Selecting Indicators
+
+With the exception of _connectedness_, indicators of our selected critical issues are well developed in the measurement literature. As a further step in preparing the survey, we conducted a more detailed search of other quantitative studies that developed and applied measures of these particular capacities.  In particular we drew from 'Kids Online' [@livingstone2010risks], Helsper's [-@helsper2012corresponding] 'Corresponding fields model', a study by Humphry [-@humphry2014importance] of mobile use among homeless populations, and indicators compiled by the [Young and Well CRC](http://www.youngandwellcrc.org.au/) [-@crc2013standardmeasures], a large Australian-based research initiative that has explored how digital technologies can better support young people's wellbeing. Other indicators were developed by the *Digital Capacities Index* team. These indicators were compiled into a database of approximately 430 indicators ^[Note: should link to an online open access version. Would need clearance from various authors].
+
+This database formed the basic input to a follow-up all day workshop to select indicators. A number of indicators were flagged as duplicates; those remaining were scored on a simple three-point scale for relevance to our five nominated issues and the Australian context. Some measures of _Engagement_, _Inclusion_ and _Consequences_, taken from other surveys, were integrated into _Connectedness_. Time constraints on the length of the survey - approximately 25 minutes for completion, including consent forms and demographic variables -- constrained the number that could be included. The workshop nominated approximately 60 'candidate' indicators to carry forward to the pilot; these were eventually limited to a subset of 26 questions; 11 relating to demographic and other situational characteristics, and the remaining 15 spread across the other 4 issues (see _Appendix 1_ ^[consider putting the survey as an Appendix, or online.]). All but two of these questions contained varying number of statements, scaled according to (a) frequency of various online behaviour, (b) levels of agreement with statements about digital capacities, (c) perceived importance of online activities and (d) ease of use of digital technologies. The remaining two, relating to support given to or received from others, included 'yes/no' responses. A total of 158 statements were included in the survey, broken into the four critical issues as follows:
+
+- **Competencies** (`r length(vars.competencies)` indicators).
+- **Interests** (`r length(vars.interest)` indicators).
+- **Resilience** (`r length(vars.resilience)` indicators).
+- **Social connectedness** (`r length(vars.connectedness)` indicators).
+
+
+### Survey Administration and Analysis
+
+In the latter months of 2015, the survey was piloted with approximately 20 test respondents. We also consulted a number of international digital scholars and practitioners. Feedback from the pilot was incorporated into the final draft administered to the sample in early 2016. The survey included a total of `r format(sampleSize(), big.mark   = ",")` participants. We requested the survey provider provide a panel broadly representative, in terms of age groups, gender and geography, of the general population aged 12 and over usually residing in Australia. Geographic considerations included an urban/rural distinction within each State. Additional quotas were implemented for the boosted sample of young people to ensure a gender balance among the 12 to 14 year olds and the 15 to 17 year olds subsamples. As the panel provider recruited participants online, our sample is expected to be skewed towards Australian residents and households with comparatively high digital capacities. This caveat is signficant to the interpretation of our results below.
+
+In terms of analysing our results, one limitation of our consultative and syncretic approach to indicator develoment is that theorisation of relationships between higher-order issues (_Interests_, _Connectedness_, and so on) can need to be reconstructed _post facto_. To address this risk, we employ principal component analysis to determine whether specific statements adequately align to our higher order groupings of indicators and critical issues.
+
+
+## Surveying Digital Capacities
+
+We present our survey findings in three sections. In the first section, we present our descriptive data. In the second section, we show both correlations obtained from direct tests of relationships, and the results of our factor and principal component analyses. In the third section, we discuss how these results are used to compose a simple index that summarises responses to the individual indicators, both under the four issue categories and for the instrument as a whole.
+
+
+### Descriptive Findings
+
+<!-- Insert histograms and choropleths here -->
+
+
+#### Demographic Distributions
+
+Our articipants' ages ranged from `r min(data$age)` to `r max(data$age)`, with a median value of `r median(data$age)`.
+
+*`r cf("age.freq")`* provides more detailed age demographics:
+
+```{r ageFreq, echo=FALSE}
+
+(gg <- chartWrap(ageChart(data)))
+
+```
+
+**`r fig_nums("age.freq")`**
+
+These show the spread of participants' ages correspond approximately to Australia's adult demographic that of Australia's population aged 12 and over as per estimate demographics from the ABS at June 2015.
+
+
+Participant gender is fairly evenly distributed across the sample. The survey included `r format(length(which(data$gender == "Female")), big.mark   = ",")` (`r format(100 * length(which(data$gender == "Female")) / length(data$gender), digits = 2)`%) women; `r format(length(which(data$gender == "Male")), big.mark   = ",")` (`r format(100 * length(which(data$gender == "Male")) / length(data$gender), digits = 2)`%) men; and `r format(length(which(data$gender == "Other")), big.mark   = ",")` (`r format(100 * length(which(data$gender == "Other")) / length(data$gender), digits = 2)`%) identifying as 'Other'.
+
+<!--
+`r cf("gender.freq")` illustrates the gender distrubtion of the sample:
+
+```{r genderFreq, echo=FALSE}
+
+(gg <- chartWrap(genderChart(data)))
+
+```
+
+**`r fig_nums("gender.freq")`**
+
+-->
+
+We also combined age and gender frequences, as shown in *`r cf("gender.and.age.freq")`*:
+
+```{r genderAndAgeFreq, echo=FALSE}
+
+(gg <- chartWrap(genderAndAgeChart(data)))
+
+```
+
+**`r fig_nums("gender.and.age.freq")`**
+
+These figures approximate to Australia's adult age distribution, as reported by the ABS in 2014 in **`r cf("gender.and.age.freq.abs")`** below, though with a considerably higher skew towards younger women and older men.
+
+
+![Population Structure, Age and sex - Australia - 1994 and 2014](http://www.abs.gov.au/ausstats/abs@.nsf/0/1cd2b1952afc5e7aca257298000f2e76/Body/0.2A9C!OpenElement&FieldElemFormat=gif)
+
+**`r fig_nums("gender.and.age.freq.abs")`**
+
+
+Survey distribution by state follows Australia's demographic distribution more closely. The split of participants between urban and regional/rural is as follows:
+
+```{r locationFreq, fig.height = 2, echo=FALSE}
+
+(gg <- chartWrap(locationChart(data)))
+
+```
+**`r fig_nums("location.freq")`**
+
+The percentage of reported urban residents here is `r formatC(100 * length(data[data$location == "Urban", "location"]) / length(data[,"location"]))` - considerably less than [World Bank figures of 89%](http://data.worldbank.org/indicator/SP.URB.TOTL.IN.ZS).
+
+
+#### Competencies
+
+In relation to competencies, participants were asked to respond to two questions:
+
+ - Frequency of online activity
+ - Perceived ease of conducting online activity
+
+*Frequency of online activity* measures frequency of 15 different activities, ranging from highly common activities such as sending email through to less common activities (in 2016), such as writing blogs.
+
+`r cf("freq.74")` below shows the relative frequencies of each activity. Using the Internet generally (for work, study, and for personal use), sending email and social networking are the most common activities. Streaming music, playing games with others, sharing media, and writing blogs or diaries are comparatively uncommon activities.
+
+
+```{r graphSubQuestion74, fig.width = 8, fig.height = 9.5, echo=FALSE}
+
+(gg <- chartWrap(graphSubQuestionFrequencies(
+  vars.competencies.online.activities.74,
+  "Frequency",
+  frequencyLabels,
+  "online-activities-74",
+  -6.0,
+  yawcrcPaletteFivePoints
+  )))
+
+```
+
+**`r fig_nums("freq.74")`**
+
+
+Respondents were also asked to rate the ease or difficulty of 27 online activities. Overall respondents report a high level of competency across all activities with bookmarking a website and connecting to a wifi network scoring the highest. Understanding the language that others use online and creating a blog were reported as more difficult activities. Despite the high level of competence reported by respondents in each of the 27 activities there were a small percentage of respondents who reported each of these activities as difficult or very difficult. Analysing the results according to age ranges provides a more illustrative breakdown of the results.
+
+```{r graphSubQuestion431, fig.width = 8, fig.height = 15.5, echo=FALSE}
+
+(gg <- chartWrap(graphSubQuestionFrequencies(
+    vars.competencies.431,
+    "Ease",
+    easeLabels,
+    "competencies-ease-of-tasks-431",
+    -7.5,
+    yawcrcPaletteFivePoints)))
+
+```
+
+**`r fig_nums("freq.431")`**
+
+
+
+#### Interests
+
+We asked five questions on the critical issue of *Interests*:
+
+ - Frequency of online activity
+ - Interest in seeking difference
+ - Interest in fitness
+ - Interest in health improvement
+ - Interest in keeping in touch
+
+*Frequency of online activity* measures frequency of 11 different activities related to information seeking, ranging from highly common activities, such as looking for information about general interests on platforms such as Wikipedia, through to more specific activities (in 2016), such as national government services.
+
+*`r cf("freq.437")`* below shows the relative frequencies of each activity. Looking for information about a topic of general interest where answers were provided by _Wikipedia_, _Quora_ or other informational sites, and searching for prices are the most common activities. Looking for information about concerts and events, and political or societal issues are comparatively uncommon activities.
+
+
+
+```{r graphSubQuestion437, fig.width = 8, fig.height = 7.5, echo=FALSE}
+
+(gg <- chartWrap(graphSubQuestionFrequencies(vars.interests.general.437, "Frequency", frequencyMonthLabels, "interests-general-437", -8.0)))
+
+```
+
+**`r fig_nums("freq.437")`**
+
+
+
+The question about *Interest in seeking difference*  measured frequency of 7 different online activities whose main purpose is to determine to what extent online information seeking helps people to find others who share their interests and to learn about or understand social and cultural difference.
+
+*`r cf("freq.341")`* below shows the relative frequencies of each activity. Finding people of a similar age who share my interests is the most frequent and most commonly reported activity, followed by learning new things about people with mental illnesses or physical disabilities and learning new things about other ethnic groups. Learning things about participant's own ethnic group and feeling more connected to spiritual or religious beliefs are less common. This suggests that for Australians, online information seeking is more directed towards questions of interest, gender and health, rather than ethnicity and religion.
+
+
+```{r graphSubQuestion341, fig.width = 8, fig.height = 6.0, echo=FALSE}
+
+(gg <- chartWrap(graphSubQuestionFrequencies(vars.interests.difference.seeking.341,
+  "Agreement",
+  agreementLabels,
+  "interests-difference-seeking-341",
+  -7.5,
+  yawcrcPaletteFivePoints)))
+
+```
+
+**`r fig_nums("freq.341")`**
+
+
+The question on *Interest in fitness and health improvement* measured frequency of 10 different online activities whose main purpose is to determine to what extent online technologies assist people to manage their health and fitness.
+
+*`r cf("freq.352")`* below shows the relative frequencies of each activity. Looking up information or asking others about a training program is the most frequent and commonly reported activity, followed by looking up information or asking advice on a medical condition. The least common activities reported are participating in an online health or fitness community and filling out questionnaires about fitness. There are not large differences reported between any of the activities, and less than a third of participants reported engaging in any of the activities on more than a monthly basis.
+
+
+```{r graphSubQuestion352, fig.width = 8, fig.height = 7, echo=FALSE}
+
+(gg <- chartWrap(graphSubQuestionFrequencies(vars.interests.fitness.352, "Frequency", frequencyMonthLabels, "interests-fitness-352", -5.0)))
+
+```
+
+**`r fig_nums("freq.352")`**
+
+We asked a series of subsidiary statements about use of digital capacities to improve health. More participants agreed than disagreed (32% to 17%) with the statement they made better decisions as a result of online advice. In terms of outcomes, responses were more evenly split: 25% agreed their health had improved, while 20% disagreed.
+
+```{r graphSubQuestion353, fig.width = 8, fig.height = 3.5, echo=FALSE}
+
+(gg <- chartWrap(graphSubQuestionFrequencies(
+  vars.interests.health.improvement.353,
+  "Agreement", agreementLabels, "interests-health-improvement-353", -7.5,
+  yawcrcPaletteFivePoints)))
+
+```
+
+**`r fig_nums("freq.353")`**
+
+
+The survey asked respondents to rate the importance of their motivations for using the internet for maintaining their general interests, along with their connections with others. Respondents were asked to rate 14 statements which ranged between extremely important and not important at all. Each statement was rated with some degree of importance by a majority of respondents. "Communicating with friends and family" was rated the highest, with over 84% of respondents rating this fairly or extremely important. "Opening up new worlds and fueling my imagination" also scored highly. Respondents rated ”Expressing who I am by making my identity and thoughts more public” or “Making online communities aware of injustices” as comparatively less important.  This suggests that the reasons that motivate people to use the internet are contingent upon their connections with others and their sense of self.
+
+
+```{r graphSubQuestion430, fig.width = 8, fig.height = 7.5, echo=FALSE}
+
+(gg <- chartWrap(graphSubQuestionFrequencies(vars.interests.keeping.in.touch.430, "Importance", importanceLabels, "keeping-in-touch-430", -5.0)))
+
+```
+
+**`r fig_nums("freq.430")`**
+
+
+
+#### Resilience
+
+Our survey asked participants to respond to three questions about potential risks and harms of online activity, and how they prepare themselves for dealing with them:
+
+ - Experience of potential risks and harms of online activity in the last 12 months
+ - Level of agreement with statements about potential risks and harms
+ - Level of agreement with statements about engaging with others online
+
+
+*Frequency of harmful events* measures frequency of 11 risks of online activity. These include getting a virus on one's device or seeing upsetting content online, or actions taken as a protection measure against those risks, such as reporting an issue online, deleting data or blocking further contacts from an individual.
+
+**_`r cf("freq.434")`_ below shows the relative frequencies of experiencing a risk, or taking a specific action in response to a risk, in the last 12 months.
+**
+
+On average, more than half of respondents (51%) reported having never experienced these risks or potentially harmful events. The event that was most commonly experienced was 'Seeing or experiencing something on the internet that had bothered them in some way' with 55% of respondents experiencing this at least once in the last 12 months, and 14% reporting experiencing this on a weekly basis or more often.
+
+Half of respondents reported taking protective measures, such as blocking further contacts from an individual or deleting data in response to security and privacy concerns, at least once in the last 12 months.
+
+Although respondents reported experiencing potentially harmful events online, the frequency of such events remains generally low. The most frequently reported action in response to online risks is to use extra security measures to protect privacy.
+
+```{r graphSubQuestion434, fig.width = 8, fig.height = 8,  echo=FALSE}
+
+(gg <- chartWrap(graphSubQuestionFrequencies(vars.resilience.harm.events.434, "Frequency", frequencyMonthLabels, "resilience-harm-events-434", -8.5)))
+
+```
+
+**`r fig_nums("freq.434")`**
+
+
+*`r cf("freq.435")`* below shows the level of agreement with a number of statements relating to online harms.
+
+Despite reporting having experienced some potentially harmful events in the last 12 months, the level of agreement with statements about online harms of a more general nature show an overall positive attitude towards those risks. The majority of respondents agree or strongly agree that the opportunities of online activities outweigh its risks and that some level of online risk is inevitable but also provides an important learning opportunity.
+
+Online security and safety remains a pressing concern for just over a third of respondents but there appears to be both an increased level of acceptance and the development of coping mechanisms to better manage the risks.
+
+
+```{r graphSubQuestion435, fig.width = 8, fig.height = 5.5, echo=FALSE}
+
+(gg <- chartWrap(graphSubQuestionFrequencies(
+  vars.resilience.harms.agreement.435,
+  "Agreement", agreementLabels, "resilience-harms-agreement-435", -6.5,
+  yawcrcPaletteFivePoints)))
+
+```
+
+**`r fig_nums("freq.435")`**
+
+
+Thinking about how they feel when they engage with others online, respondents were asked to what extent they agree with several statements relating to their willingness to engage with others.
+
+For each of these statements, a large proportion of respondents neither agree nor disagree. People tend to disagree that it is easier to be oneself online than face to face or that they talk about private things online that they do not share face to face. Similar proportions agree or disagree that going online makes them feel better when they are going through a difficult time.
+
+```{r graphSubQuestion428, fig.width = 8, fig.height = 5.5, echo=FALSE}
+
+(gg <- chartWrap(graphSubQuestionFrequencies(vars.resilience.engage.with.others.428,
+  "Agreement", agreementLabels, "resilience-engage-with-others-428", -7.0,
+  yawcrcPaletteFivePoints)))
+
+```
+
+**`r fig_nums("freq.428")`**
+
+
+
+
+#### Social Connectedness
+
+Our survey asked participants to respond to questions about social connectedness and the role technology plays in their interactions with other people. Key topics include:
+
+  * Frequency of online activity to maintain connections
+  * Importance of online life to maintaining relationships
+  * Level of agreement with statements about broader issues concerning technology
+
+
+The first question measures frequency of 8 different online activities whose main purpose, or direct consequence, is to interact with others or to maintain connections.
+
+*`r cf("freq.343")`* below shows the relative frequencies of each activity. Reading updates from friends or family via email or social media is the most frequent and most commonly reported activity, followed by making comments on those updates. Making new friends, meeting people or looking at websites that help meet new people are less common. This suggests that online activity is primarily used to strengthen connection with offline networks rather than as a distinct circle of connections.
+
+```{r graphSubQuestion343, fig.width = 8, fig.height = 6, echo=FALSE}
+
+(gg <- chartWrap(graphSubQuestionFrequencies(vars.connectedness.events.343, "Frequency", frequencyMonthLabels, "connectedness-events-343")))
+
+```
+
+**`r fig_nums("freq.343")`**
+
+
+
+When asked how important online life is in maintaining relationships with various groups within a broader social network, friends and family were the two groups with the highest level of importance. Online is also considered important in maintaining relationships with other networks of interest and work or school peers, but comparatively not as important to the maintenance of relationships with neighbours.
+
+```{r graphSubQuestion287, fig.width = 8, fig.height = 5, echo=FALSE}
+
+(gg <- chartWrap(graphSubQuestionFrequencies(vars.connectedness.maintenance.287, "Importance", importanceLabels, "maintaining-connections-287", -4.8)))
+
+```
+
+**`r fig_nums("freq.287")`**
+
+
+
+The survey also asked respondents to what extent they agree or disagree with a number of statements with regards to attitudes towards broader issues concerning technology.
+
+Similar to our findings on the more general statements about online risks and harms, the attitudes of respondents towards technology is especially positive with over 60% reporting being optimistic about the future of technology. Nearly three quarters (74%) agree or strongly agree that technology is part of everyday life. Nearly half (49%) believe that technology can not only make participants more effective members of their community or nation, but can also foster social inclusion.
+
+The positive attitude is nevertheless counterbalanced with concerns about the use of online information by governments or companies, the impact on the environment or the growing divide between technology experts and the rest of society.
+
+```{r graphSubQuestion429, fig.width = 8, fig.height = 6.5, echo=FALSE}
+
+(gg <- chartWrap(graphSubQuestionFrequencies(vars.connectedness.tech.attitudes.429, "Agreement", agreementLabels, "connectedness-tech-attitudes-429", -7.0,
+  yawcrcPaletteFivePoints)))
+
+```
+
+**`r fig_nums("freq.429")`**
+
+
+
+
+
+
+### Exploring Responses: A Principal Component Analysis
+
+```{r pca-setup, echo=FALSE}
+d.pca <- prcomp(data.scaled[,vars.index.no.quals], center = TRUE, scale. = TRUE)
+d.sum.variances <- length(d.pca$sdev)
+d.pca$relative.variance <- d.pca$sdev**2 / d.sum.variances * 100
+comp1 <- d.pca$rotation[,1]
+comp2 <- d.pca$rotation[,2]
+comp3 <- d.pca$rotation[,3]
+comp4 <- d.pca$rotation[,4]
+comp1.stack <- stack(comp1[order(-stack(comp1)$values ** 2)])
+comp2.stack <- stack(comp2[order(-stack(comp2)$values ** 2)])
+comp3.stack <- stack(comp3[order(-stack(comp3)$values ** 2)])
+comp4.stack <- stack(comp4[order(-stack(comp4)$values ** 2)])
+top20 <- comp1.stack[1:20,]
+top20$q <- as.character( sapply( gsub('_.*', '', top20$ind), questionCategory ) )
+top20$ci <- as.character( sapply( gsub('_.*', '', top20$ind), questionIssue ) )
+top20$ci.q <- paste(top20$ci, ": ", top20$q, sep = "")
+top20.melted <- melt(table(top20$ci.q))
+top20.melted <- top20.melted[order(-top20.melted$value),]
+top20.percentage <- sum(top20$values ** 2) * 100
+comp1.sd <- sd(comp1 ** 2) * 100
+comp2.sd <- sd(comp2 ** 2) * 100
+comp3.sd <- sd(comp3 ** 2) * 100
+comp4.sd <- sd(comp4 ** 2) * 100
+
+dt.pca <- prcomp(data.scaled[,vars.totals.no.quals], center = TRUE, scale. = TRUE)
+dt.sum.variances <- length(dt.pca$sdev)
+dt.pca$relative.variance <- dt.pca$sdev**2 / dt.sum.variances * 100
+
+```
+
+We conducted a principal component analysis of the survey data, to explore, firstly, whether each set of variables and questions could be more effectively summarised, and to test, secondly, whether respondent variances were consistent with our groupings by critical issue. Each of the individual survey statements were included in the analysis, with the exception of qualitative variables that measured whether respondents had offered or received technical support from others around them. The analysis was conducted in _R_, using the stats' package _prcomp()_ function with _center_ and _scale_ parameters set to 'TRUE'. We show and discuss two graphs: the relative variances between components, and the distribution of respondents by the first two components.
+
+*`r cf("pca.variable.scree")`* shows the relative contribution of each component to variances in the data, generated by the analysis of 133 variables. The steep asymptote illustrates that a relatively small number of components contribute to these variances. The first component makes up `r round(d.pca$relative.variance[1], 1)` per cent of the variance; the first seven components make `r round(sum(d.pca$relative.variance[1:7]), 1)` per cent; and the first twenty components make up `r round(sum(d.pca$relative.variance[1:20]), 1)` per cent ^[Need a note on collinearity?].
+
+```{r pca-variables-scree, fig.width = 8, fig.height = 8, echo=FALSE}
+
+generateScreeForPCA(d.pca)
+
+```
+**`r fig_nums("pca.variable.scree")`**
+
+
+*`r cf("pca.variable.scree")`* shows the first two components plotted, and for illustrative purposes, colored by the Australian state where the respondent resides. This confirms the first component, while only accounting for little more than a quarter of the overall variance, is significantly more influential than the second component.
+
+<!--Differences in gender is limited, though the elliptical banding shows males score higher against the first component, while females and those who responded 'Other' score higher against the second component. -->
+
+
+```{r pca-variables, fig.width = 8, fig.height = 8, echo=FALSE}
+
+generateGraphForPCA(d.pca)
+
+```
+
+**`r fig_nums("pca.variable")`**
+
+
+We then examined the top 20 rotation values for the first component. Their frequencies, shown in _Table 1_ below, show that the critical issue of 'interests' represent 17, or 85%, of the most significant variables contributing to this component. This suggests that interests relate strongly to this first component, and account for a larger amount of the overall variance of the survey data. However the combined variances of the top 20 variable comprise only 22% of the component, and the contribution of all 133 variables to this component is relatively homogenous. The standard deviation of the variances, also expressed in percentile terms, is only 0.25%.
+
+```{r pca-variables-top, fig.width = 8, fig.height = 8, echo=FALSE}
+
+kable(top20.melted, digits = 2, col.names = c("[Critical Issue]: [Variable]", "Count"), row.names = F)
+
+```
+
+We also plotted an exploratory correlation matrix, as shown in *`r cf("corrections.exploratory")`* below. This depicts the directions and intensities of all individual variables correlated with eachother, in the order questions associated with these variables were asked in the survey. Again, qualitative variables related to support are removed, as are situational variables.
+
+The visualisation matrix shows that none of the 133 variables correlate negatively, which would be shown in red. Instead correlations vary from uncorrelated or weakly correlated (white, faint purple) through to strongly correlated (purple, dark blue). Of particular significance are the larger squares that follow the diagonal - these show that statements belonging to the same question elicit highly comparable responses. The same pattern holds more weakly for statements belonging to the same critical issue.
+
+```{r correlation-exploratory, fig.width = 8, fig.height = 8, echo=FALSE}
+generateCorrelationsExploratory()
+```
+
+**`r fig_nums("corrections.exploratory")`**
+
+Several implications follow from this analysis. First, the first component accounts for considerably greater variation than other components. Yet, despite the apparent influence of the 'Interests' critical issue, the contribution of individual variables to this component is quite uniform. This implies that the survey is not readily reducible to a smaller set of variables; all of those included play a role in the overall variance. We found similar patterns of minimal rotational differences in the variances of components 2, 3 and 4.
+
+Second, the exploratory correlation matrix illustrates that strong correlations are all in a positive direction. In no cases would participants exhibit weak capacities in one area and strong capacities in another. At worst, different capacities may not be correlated at all.
+
+Third, individual statements correlate strongly with other statements under the same question, and to a lesser degree, with other statements under the same issue. This implies the survey design appropriately groups statements and questions under issues, and lends some weak support to the conceptual coherence of the issues themselves. Together with the lack of evident decomposition of variables to clearly identifiable components, this also lends support to the conclusion that the four digital capacities are both positively interrelated in complex ways, and that their indicators are easily reducible to latent alternatives.
+
+<!--
+
+#### PCA by Question
+
+
+
+``{r pca-questions-scree, fig.width = 8, fig.height = 8, echo=FALSE}
+
+generateScreeForPCA(dt.pca)
+
+``
+
+**r fig_nums("pca.questions.scree")**
+
+
+`{r pca-questions, fig.width = 8, fig.height = 8, echo=FALSE}
+
+generateGraphForPCA(dt.pca)
+
+`
+
+**r fig_nums("pca.questions")**
 
 -->
 
 
-<!--
-Relevant links:
 
-https://www.igvita.com/slides/2012/bigquery-github-strata.pdf
-http://www.itworld.com/article/2704843/cloud-computing/where-in-the-world-are-github-users-.html
-https://github.com/rstats-db/bigrquery
-https://www.githubarchive.org/
+### Composing an Index of Digital Capacities
+
+<!-- Insert indexes here -->
+
+#### Aggregates by Critical Issue
+
+To gain an overall picture of our results, we generated a series of stacked graphs in *`r fig_nums("index.chart")`*. These aggregate responses to each critical issue (*Competencies*, *Interests*, *Resilience* and *Competencies*), and the combined total.
+
+These results are indicative only, and have several evident limitations we discuss further below. The procedure to generate scores for each of the issues is as follows:
+
+1. Interpret each question as having either a *positive* or *negative* influence on the score of the critical issue. For example, "Frequency of harmful events" has a *negative influence* on the issue of Resilience (and indeed, on overall "Digital Capacities").
+2. Determine the *direction* of the scale coding. For example, in all of our "Agreement" questions, "Strongly Agree" was coded **5**.
+3. For each question, calculate a question score based on both its interpretation and direction, by adding responses to individual items.
+4. For each respondent, add each of their question scores to produce a respondent critical issue score. This value is converted to a percentile, where '100%' would indicate the highest possible score for each question in that critical issue.
+5. A combined score is taken by averaging the four critical issue scores.
+
+`r cf("agg.results")` then displays the relative frequencies of these scores, similar to the preceding individual question graphs. Because values are continuous (anywhere on a scale between 0 and 100 per cent), the graphs show a spectrum from blue (indicating a low score) to bright yellow (indicating a high score).
+
+The *Resilience* score is calculated in the same way as the other issue scores, with the exception that only the lasrst two items under *Question 428*, "Willingness to engage with others", are included from that question. We have intepreted these items ("When I am going through a difficult time, I go online less often"; "When I am going through a difficult time, going online makes me feel better") as having some influence (the first negative, the second positive) on *Resilience*.
+
+
+*`r cf("agg.results")`* shows that results for *Compentencies* and *Connectedness* are evenly distributed, with respondents' scores spread across the 100-point scale. Conversely, indicated by large blue band *Resilience* scores tend low, with most respondents reporting comparatively high exposure to harms, and less familiarity with methods for responding to those harms. Perhaps surprisingly, *Interest* scores also tend low. This may be explained by our limiting interests to areas of social difference, fitness, health and family, which will not effectively poll the range or extent of participants' interests. The spread of *Combined* scores reflects a relatively even distribution across a spectrum of capacities.
+
+```{r indexChart, echo=FALSE}
+
+(gg <- chartWrap(generateIndexChart()))
+
+```
+
+**`r fig_nums("index.chart")`**
+
+
+Figures *`r cf("index.cluster.chart")`* and *`r cf("index.scatter.chart")`* illustrate the combined scores, respectively by regional medians and by location of individual responses. Together they reflect the unsurprising clustering of capacities along the eastern seaboard of Australia, and other urban centres. The higher median responses in rural South Australia and New South Wales is skewed by comparatively high responses of very small samples in those areas, as `r fig_nums("index.scatter.chart")` suggests.
+
+
+```{r indexClusterChart, echo=FALSE}
+
+generateSA4Map(0, c("combined.index"), NA, yawcrcPalette5)
+
+```
+
+**`r fig_nums("index.cluster.chart")`**
+
+
+```{r indexScatterChart, echo=FALSE}
+
+generateScatterMap(0, c("combined.index"), NA, yawcrcPalette5)
+
+```
+
+**`r fig_nums("index.scatter.chart")`**
+
+<!--
+Double check results:
+table(augmented.data$SA4_NAME_2011)
+a <- aggregate(augmented.data$combined.index, by = list(augmented.data$SA4_NAME_2011), median)
+a[order(a$x),]
 -->
 
 
+This procedure was designed to communicate a sense of capacities to a broad constituency, and as such has several limitations. First, the procedure treats each of the scales as numerically regular, as ratio rather than as ordinal scales. For example, on the *Agreement* scale it assumes *Strongly agree* warrants 1 more score point than *Agree*, which in turn warrants 1 more point than *Neither Agree nor Disagree*. Second, the procedure assumes all questions and individual items have equal influence on the critical issue they have been aligned to. A refinement would incorporate a weighting on key indicators; a step we have not undertaken in this case. Finally, the output itself suffers from being necessarily reductive, and we offer similar cautions to those voiced often in the literature on urban indicators [e.g. by @kitchin2015knowing] - without adequate sensitivity to their assumptions, methods and uses, summarised metrics impart a sense of scientificity that obscures the nuance and complexity that, in this case, attends an understanding of the dynamic fields in which digital capaciities are exercised.
 
 
-## Towards a Definition of Digital Capacity
+## The Digital Capacities of Australian Households
 
-<!--
-This account attempts to work in two ways: through an integration of the fast growing literature that discusses measurement of various types of what we have here
--->
+Our work to define digital capacities, and administer a survey of these capacities across Australian households has produced a rich set of data and observations. Each of the individual questions and statements offers evidence of the diversity of capacities across the Australian population. As a baseline study, there are no prior data sets to compare with, though our focus on deriving indicators from other sources leaves open the prospect for partial comparison of particular capacities - particularly competencies and resilience - with prior work both in Australia and internationally. The exploratory PCA and correlation tests and aggregated results our definition and measurement of distinct issues are relatively robust, and could be replicated at least in further Australian studies. Though Australia is generally regarded as an advanced national consumer of digital goods and services, the variances demonstrate the capacities of its population are moderately diverse. Further work with both this and other datasets could explore in more detail how these capacities are distinguished between age groups, gender, location and other demographics. Among specific groups and locations, this survey data could also be supplemented with qualitative data to understand in more detail how and why distinctions in capacities emerge.
 
-## Methodology
+Our inclusion of connectedness, and the strong correlations between our indicators of this and other issues highlights the fact that employment of digital capacities in 2016 is no longer intrinsically related to the specific 'technical' aptitudes of individuals. Such capacities now adhere to social as much as individual units of analysis. This lends support both to the Bourdieusian-inspired discussion of fields in @helsper2012corresponding, and our own highly relational approach derived from work in the community indicator and urban sustainability disciplines [@james2014urban].
 
-The development of the Digital Capacity Index uses a mixed-methods approach:
+The pervasiveness of digital access, activities and aptitudes has motivated the correspondingly rapid rise in a literature on measurement of how these are expressed and distributed. We have argued that 'capacity' can act as a governing concept for how specific types of activities are organsed, categorised and compared. Recent calls for digital access to be treated as a fundamental right by the UN Human Rights Council [@la2011report] have begun to recognise the role digital capacities play in broader issues of social and human development. 'Capacities' here offer an important link for how the digital domain might be brought into wider measurement schemes such as the _Human Development Index_ and community asset inventories [e.g. @anand1994human; @green2015asset].
 
-1.  Data collected from international consultations, literature scans and interviews with Australian stakeholders have been used to build the database of relevant capacity definitions, metrics and indicators.
-2.  Eight in-depth qualitative case studies has been conducted in parallel with other aspects of developing and evaluating the index and any associated instruments. These case studies illuminates the digital capacity challenges faced by particular communities and across three generations (children, their parents and their grandparents). This in-depth qualitative data is vital to communicating the diversity and complexity of the experience of digital capacity to policy makers, service providers and other vested parties. They identify specific aspects of capacity that warrant either adding new indicators, or weighting existing indicators. Data collected through these studies augment the quantitative evaluation.
-3.  Development of a draft index and associated survey instrument, which have been  piloted with a convenience sample of (n=20) Australian families. The pilot involved a mix of online and offline administering of the survey, accompanied by a short series of open-ended questions designed to elicit feedback on the survey and any associated issues. Both quantitative and qualitative data have been used to refine the instrument.
-4.  The Index are being progressively and iteratively refined based on the qualitative and pilot survey data before being run online with a targeted sample of 16 – 25, 45 – 60 and 65 – 75 year olds.
-5.  Data has been analysed and compiled to produce a report on the digital capacity of Australian families.
-
-These methods are coordinated within an integrated and holistic theoretical approach. We adapt and extend recent work – for example on digital safety and digital inclusion, which we view as a prerequisites but not equivalent to the broader idea of “digital capacity”. To establish a framework for assessing different dimensions of digital capacity, we propose drawing upon the [Circles of Social Life approach](http://www.circlesofsustainability.org/). Used by the United Nations Global Compact Cities Programme, the World Association of Major Metropolises, World Vision, and a number of local governments to support their engagement in cities, the approach treats social life as made up of four domains of practice — the economic, the ecological, the political and the cultural. In the context of digital capacity, we would identify and align specific indicators against each of these fields. We list some strictly indicative examples below:
-
-* Economic:   capacity to use digital resources to improve job readiness; use of technology to derive income; perceived significance of digital skills and competencies in future employment
-* Ecological:     levels of concern about online safety i.e. perceived safety and security operating in various online ‘spaces’; capacity to locate and deploy privacy and security tools; management of technology (both use and abuse) within the household; use of maps to understand local and global environments
-* Political:  impact of online safety policy and legislation across generations; key sources of digital safety influence; use of digital media to stay informed about political events; capacity to mobilise or engage with others for political purposes through technology
-* Cultural:   understanding of and resilience in dealing with digital safety issues; impact of informal learning on digital safety and participation; participation in cultural life through technology; active role as digital “facilitator” in cultural fields of family, neighbourhoods, and community groups.
-
-The statistical data from the Index (the collection of which is deeply informed by the findings of the qualitative case studies) can be represented primarily in the form of ‘circles of social life’ diagrams, as well as through other data visualisation methods such as mapping and infographics. Mapped to these four domains, pilot results can be further analysed in terms of significant thematic and demographic hypotheses and relationships. For example, do young people with strong economic digital capacities translate those capacities to other spheres of social life? Or are there significant differences in how different generations exercise digital capacities in relation to sustaining cultural forms? The data gathered through the Index will therefore allow for important diagnostics about intergenerational and interdomain relationships, highlighting areas of community and social concern.
-
-One key area the Index addresses explicitly is perceptions of and responses to digital safety issues. We propose that the deployment of “capacity”, along with the four domain model, forms a strong platform for interpreting these concerns – as inhibitors of the exercise of distinct capacities, rather than as a stand-alone area. As examples, perceived concern about political censorship or privacy acts as an inhibitor of the expression of free speech online; perceived concern about predation and vilification acts as an inhibitor of cultural expression. By discussing capacities as positive virtues of digital life, mapped against the four domains outlined above, the Index provides a robust platform from which to develop meaningful policy and practice interventions.
-
-We included a total of `r length(vars.all)` items measuring (a) frequency of various online behaviour, (b) levels of agreement with statements about digital capacities, (c) perceived importance of online activities and (d) ease of use of digital technologies.
-
-We further distinguished questions into the following key thematic areas, or what we have termed, following @james2014urban, 'critical issues'. These issues are:
-
- - **Competencies** (`r length(vars.competencies)` indicators).
- - **Interests** (`r length(vars.interest)` indicators).
- - **Resilience** (`r length(vars.resilience)` indicators).
- - **Social Connectedness** (`r length(vars.connectedness)` indicators).
-
-These four issues were distilled from a list of nine issues that also included *Engagement*, *Inclusion*, *Policy Environment*, *Infrastructure* and *Consequences*.
-
-Against these four issues, we selected items and scales from existing sources in the literature where possible. In particular we drew from 'Kids Online'
-[@livingstone2010risks], Helsper's [-@helsper2012corresponding] 'Corresponding fields model', a study by Humphry [-@humphry2014importance] of mobile use among homeless populations, and indicators compiled by the [Young and Well CRC](http://www.youngandwellcrc.org.au/) [-@crc2013standardmeasures]. Other indicators were developed by the *Digital Capacities Index* team.
-
-A large number of candidate scales were distilled down to the current list after two day-long workshops, and testing of the survey.
+At the same time we acknowledge, just as many community indicator approaches have done, the need for such measurement practices themselves to be calibrated to the specific spaces and times of their administration. We put forward one approach for doing so, and demonstrate how this can be applied to measure the digital capacities of Australian households in 2016. Our findings show a moderately formal process of developing issues and indicators, through consultation with the literature and experts, is able to produce a robust measurement instrument. The resulting data offers a rich platform for exploring, as we have done, descriptives of particular capacities, the possibility of latent variables and relationships, and aggregate summaries. This platform also provides considerable further scope for hypothesising how capacities are ranged according to demography, and might be related, in more detail, to eachother. To assist with the goal of measuring capacities in comprehensive yet flexible ways, we are releasing the database of compiled indicators, the survey itself and the _R_ code as part of an open source 'dashboard' (details forthcoming^[Note: we cannot say where without revealing author identities]). This will complement existing initiatives aimed at measuring capacities at a more fine-grained level, and we hope will also encourage replication and adaptation in diverse contexts, where the digital is increasingly imbricated in our more general human condition.
 
 
-## Results
+## Acknowledgements
 
-TBD
+This work was supported by Google Australia and Western Sydney University under Grant XXX.
 
-
-## Discussion
-
-TBD
-
-
-## Conclusion
-
-TBD
-
+## Appendix 1 - _Digital Capacities Index_ Survey ^[Running into word length issues by including the full survey, especially on top of the large number of graphs. Consider posting the survey online and linking to it.]
 
 ## References

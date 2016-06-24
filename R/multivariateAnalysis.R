@@ -2,7 +2,7 @@
 
 # http://stackoverflow.com/questions/31337922/adding-italicised-r-with-correlation-coefficient-to-a-scatter-plot-chart-in-ggpl
 corrEqn <- function(x,y, digits = 2) {
-  corr_coef <- round(cor(x, y), digits = digits)
+  corr_coef <- round(cor(x, y, method = "spearman"), digits = digits)
   paste("italic(r) == ", corr_coef)
 }
 
@@ -14,20 +14,45 @@ generateCorrelation <- function(var1, var2, label) {
             label = corrEqn(data.scaled[,var1],
                              data.scaled[,var2]), parse = TRUE)
 
-   if (PRINTING) {
+  if (PRINTING) {
  		ggsave(file = paste("./figs/correlation/", label, ".png", sep = ""),
  		  width = png.width,
  		  height = png.height
  		)
  	}
+  correlation.test <- cor.test(data.scaled[,var1], data.scaled[,var2])
+  return (correlation.test)
 
-  return (g)
 }
 
 generateCorrelationsExploratory <- function() {
-  cors.index <- cor(data.scaled[,vars.index], method = "spearman")
+
+  cors.index <- cor(data.scaled[,vars.index.no.quals], method = "spearman")
+  # cors.index <- cor(data.scaled[,vars.index], method = "spearman")
+  var.breaks <- colnames(cors.index)[seq(1, length(colnames(cors.index)), 6)]
   g <- qplot(x=Var1, y=Var2, data=melt(cors.index), fill=value, geom="tile") +
-    scale_fill_gradient2(limits=c(-1, 1))
+      scale_fill_gradient2(limits=c(-1, 1), low = "#EA3568", mid = "white", high = "#139DEA") +
+      labs(x = "All 133 scalar variables", y = "", fill = "Correlations") +
+      scale_x_discrete(breaks = var.breaks) +
+      scale_y_discrete(breaks = var.breaks) +
+      theme(
+            # GRID
+            # TITLE
+            # plot.title = element_text(colour = title.color, lineheight=1.0, face="bold", size=graph.title.size),
+            # axis.title = element_text(lineheight=1.0, size = axis.title.size),
+            axis.title.x = element_text(size = axis.title.size, vjust = x.axis.vjust),
+            axis.title.y = element_text(size = axis.title.size, vjust = y.axis.vjust),
+
+            # LINE
+            axis.line = element_line(colour = "black"),
+#            axis.ticks = element_blank(),
+
+            # TEXT
+            axis.text.x = element_text(color=text.color, angle=45, vjust=1.0, hjust=1.0, size = 6),
+            axis.text.y = element_text(color=text.color, angle=45, size = 6),
+            axis.title = element_text(color=title.color, lineheight=1.0, size = axis.title.size)
+      )
+
 
   if (PRINTING) {
 		ggsave(file = "figs/correlation/exploratory-matrix.png",
@@ -37,11 +62,79 @@ generateCorrelationsExploratory <- function() {
 	}
 
   return (g)
+
 }
+
+generateTheme <- function(g) {
+  return (theme(
+                  # GRID
+                  panel.grid.minor.y = element_blank(),
+                  # panel.grid.major.y = element_blank(),
+                  panel.grid.major.y = element_line(colour = foreground.color),
+                  panel.grid.minor.x = element_blank(),
+                  panel.grid.major.x = element_blank(),
+
+                  # BACKGROUND
+                  panel.background = element_rect(fill = background.color, colour = foreground.color),
+
+                  # TITLE
+                  # plot.title = element_text(colour = title.color, lineheight=1.0, face="bold", size=graph.title.size),
+                  axis.title = element_text(color=title.color, lineheight=1.0, size = axis.title.size),
+                  # axis.title = element_text(lineheight=1.0, size = axis.title.size),
+                  axis.title.x = element_text(size = axis.title.size, vjust = x.axis.vjust),
+                  axis.title.y = element_text(size = axis.title.size, vjust = y.axis.vjust),
+
+                  # LINE
+                  axis.line = element_line(colour = "black"),
+
+                  # TEXT
+                  axis.text.x = element_text(color=text.color, angle=45, vjust=1.0, hjust=1.0, size = axis.text.size),
+                  axis.text.y = element_text(color=text.color, angle=45, size = axis.text.size)
+                  # axis.text.x = element_text(angle=45, vjust=1.0, hjust=1.0, size = axis.text.size),
+                  # axis.text.y = element_text(angle=45, size = axis.text.size)
+                  , legend.direction = 'horizontal',
+                  legend.position = 'bottom'
+              ))
+}
+
+generateGraphForPCA <- function(fit) {
+
+  library(ggbiplot)
+
+  g <- ggbiplot(fit, obs.scale = 1, var.scale = 1,
+                groups = data$gender,
+	              ellipse = TRUE,
+	              circle = TRUE, 
+                alpha = 0.5,
+                var.axes = F,
+                varname.size = 6)
+  g <- g + generateTheme()
+  # g <- g + scale_color_discrete(name = '')
+  g <- g + scale_color_manual(name = '', values = yawcrcPalette9)
+
+	return (g)
+
+}
+
+generateScreeForPCA <- function(fit) {
+
+  # Variances of principal components
+  sum.variances <- length(fit$sdev)
+  variances <- data.frame(variances=fit$relative.variance, pcomp=1:sum.variances)
+  # **2 means ^2
+
+  #Plot of variances
+  g <- ggplot(variances, aes(pcomp, variances)) + geom_bar(stat="identity", fill="gray") + geom_line()
+  g <- g + generateTheme()
+
+  return (g)
+
+}
+
 
 generateCorrelations_test <- function() {
 
-  cors.totals <- cor(data.totals.scaled[,vars.totals], method = "spearman")
+  cors.totals <- cor(data.scaled[,vars.totals], method = "spearman")
   rownames(cors.totals) <- paste(sapply(rownames(cors.totals), questionCategory), ", [", rownames(cors.totals), "]")
   colnames(cors.totals) <- paste(sapply(colnames(cors.totals), questionCategory), ", [", colnames(cors.totals), "]")
   write.table(cors.totals, "output/cors-totals.csv", col.names=NA, sep = ",")
@@ -95,7 +188,7 @@ generateCorrelations_test <- function() {
 	## PCA
   ## http://www.r-bloggers.com/computing-and-visualizing-pca-in-r/
 
-	dt.pca <- prcomp(data.totals.scaled[,vars.totals], center = TRUE, scale. = TRUE)
+	dt.pca <- prcomp(data.scaled[,vars.totals], center = TRUE, scale. = TRUE)
 	# d.pca <- prcomp(data.scaled[,vars.index])
 	print(dt.pca)
 
@@ -110,7 +203,7 @@ generateCorrelations_test <- function() {
 	n <- length(comp1)
 	stack(comp1[order(stack(comp1)$values)])
 
-	printMeanAndSdByGroup(data.totals.scaled,data.scaled[224])
+	printMeanAndSdByGroup(data.scaled,data.scaled[224])
 
 	library("MASS")
 	d.lda <- lda(data$age.breaks ~
@@ -133,7 +226,7 @@ generateCorrelations_test <- function() {
 	plot(d.lda.values$x[,1],d.lda.values$x[,2]) # make a scatterplot
 	text(d.lda.values$x[,1],d.lda.values$x[,2],data$age.breaks,cex=0.4,pos=4,col="red") # add labels
 
-	d.pca <- prcomp(data.scaled[,vars.index], center = TRUE, scale. = TRUE)
+	d.pca <- prcomp(data.scaled[,vars.index.no.quals], center = TRUE, scale. = TRUE)
 	# d.pca <- prcomp(data.scaled[,vars.index])
 	print(d.pca)
 
@@ -150,18 +243,32 @@ generateCorrelations_test <- function() {
 	d.pca$x
 
 	comp1 <- d.pca$rotation[,1]
+  comp2 <- d.pca$rotation[,2]
+  comp3 <- d.pca$rotation[,3]
+  comp4 <- d.pca$rotation[,4]
 	n <- length(comp1)
 	stack(comp1[order(stack(comp1)$values)])
+  stack(comp2[order(stack(comp2)$values)])
+  stack(comp3[order(stack(comp3)$values)])
+  stack(comp4[order(stack(comp4)$values)])
+
+
+  cs1 <- stack(comp1[order(stack(comp1)$values)])
+  cs2 <- stack(comp2[order(stack(comp2)$values)])
 
 	plot(d.pca$x[,1], d.pca$x[,2]) # make a scatterplot
 	text(d.pca$x[,1], d.pca$x[,2], data$gender, cex=0.4, pos=4, col="red") # add labels
+
+  plot(comp1, comp2)
+  text(comp1, comp2, stack(comp1)$ind, cex=0.4, pos=4, col="red")
 
 	library(devtools)
 	install_github("ggbiplot", "vqv")
 
 	library(ggbiplot)
 	g <- ggbiplot(d.pca, obs.scale = 1, var.scale = 1,
-	              groups = data$age.breaks, ellipse = TRUE,
+	              groups = data$age.breaks,
+                ellipse = TRUE,
 	              circle = TRUE)
 	g <- g + scale_color_discrete(name = '')
 	g <- g + theme(legend.direction = 'horizontal',
@@ -171,7 +278,7 @@ generateCorrelations_test <- function() {
 	## http://www.statmethods.net/advstats/factor.html
 	fit <- princomp(data.scaled[,vars.index], cor=TRUE)
 	summary(fit) # print variance accounted for
-	loadings(fit) # pc loadings
+	lds <- loadings(fit) # pc loadings
 	plot(fit,type="lines") # scree plot
 	fit$scores # the principal components
 	biplot(fit)
