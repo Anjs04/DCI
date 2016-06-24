@@ -182,4 +182,14 @@ scatter =
 
 
 ###Interactive Plotly Map###
-ggplotly(scatter)
+plotly_map = ggplotly(scatter)
+
+# To publish graph online using plotly account
+Sys.setenv("plotly_username"="Anjs04")
+Sys.setenv("plotly_api_key"="95dzpuxaal")
+
+# This is too large
+plotly_POST(plotly_map, sharing = "secret")
+
+
+
